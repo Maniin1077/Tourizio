@@ -1,0 +1,164 @@
+/* =========================================
+   Variables
+========================================= */
+$primary-color: #0f766e; /* Teal / Ocean Blue */
+$secondary-color: #f97316; /* Coral / Sunset Orange */
+$bg-color: #fdf7f0; /* Soft Beige / Light Gray */
+$font-heading: "Times New Roman", serif;
+$font-body: "Open Sans", sans-serif;
+$input-bg: #f3f4f6;
+
+/* =========================================
+   Contact Component Styles
+========================================= */
+:host {
+  display: block;
+  font-family: $font-body;
+  background: linear-gradient(135deg, $bg-color 0%, #f9f9f9 100%);
+  padding: 3rem 1rem;
+
+  .backdrop-blur-md {
+    backdrop-filter: blur(12px);
+  }
+
+  h2, h3 {
+    font-family: $font-heading;
+    color: $primary-color;
+    margin-bottom: 0.5rem;
+  }
+
+  p, label {
+    font-family: $font-body;
+    color: #4b5563; // gray-700
+  }
+
+  /* Card Container */
+  .shadow-xl {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* Form Inputs */
+  input,
+  select,
+  textarea {
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    background-color: $input-bg;
+    font-family: $font-body;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2);
+      background-color: #fff;
+    }
+  }
+
+  .relative {
+    position: relative;
+
+    i {
+      position: absolute;
+      top: 50%;
+      left: 0.75rem;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      transition: all 0.3s ease;
+    }
+  }
+
+  /* Submit Button */
+  button {
+    font-family: $font-heading;
+    font-weight: 600;
+    background: linear-gradient(90deg, $primary-color, $secondary-color);
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+
+    &:hover:not(:disabled) {
+      background: linear-gradient(90deg, $secondary-color, $primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    &:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    svg {
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+
+  /* Success & Error Messages */
+  .bg-green-50, .bg-red-50 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-family: $font-body;
+
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  /* Alternative Contact Methods */
+  .flex-col {
+    gap: 1rem;
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      i {
+        font-size: 1.1rem;
+        color: $primary-color;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: $secondary-color;
+        }
+      }
+    }
+  }
+
+  /* Loader animation */
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+  }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    :host {
+      padding: 4rem 2rem;
+    }
+  }
+}

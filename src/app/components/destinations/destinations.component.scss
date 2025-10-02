@@ -1,0 +1,210 @@
+/* Map container */
+[id^="mini-map-"] {
+  width: 100%;
+  height: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+[id^="mini-map-"]:hover {
+  transform: scale(1.02);
+}
+
+/* Remove old distorted marker */
+.leaflet-marker-icon,
+.leaflet-marker-shadow {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Zoom controls */
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background-image: none !important;
+  text-indent: 0 !important;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 18px !important;
+  line-height: 30px !important;
+  width: 36px !important;
+  height: 36px !important;
+  border: 1px solid #ccc;
+  background: #fff;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  cursor: pointer;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.leaflet-control-zoom-in span,
+.leaflet-control-zoom-out span {
+  display: none !important;
+}
+
+.leaflet-control-zoom-in::after {
+  content: "+";
+}
+
+.leaflet-control-zoom-out::after {
+  content: "−";
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background: #f4f4f4;
+  color: #000;
+  transform: scale(1.15);
+}
+
+/* Skeleton loader animation */
+.skeleton {
+  /* Replaced Tailwind @apply bg-gray-200 rounded-md; */
+  background-color: #e5e7eb; /* gray-200 */
+  border-radius: 0.375rem; /* rounded-md */
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    left: 100%;
+  }
+}
+
+/* Scroll reveal animations */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
+}
+
+.scroll-reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-reveal.show:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Title reveal */
+.title-reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s ease-out;
+}
+
+.title-reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero parallax */
+.hero-parallax {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.4s ease;
+}
+
+/* Fade in for hero text */
+.fade-in {
+  opacity: 0;
+  animation: fadeInText 1s forwards;
+}
+
+@keyframes fadeInText {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Animate sliding down */
+.animate-slide-down {
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slideDown 0.8s forwards;
+}
+
+@keyframes slideDown {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animate fade-in delay */
+.animate-fade-in {
+  opacity: 0;
+  animation: fadeInText 1.2s forwards;
+}
+
+.animate-fade-in.delay-200 {
+  animation-delay: 0.2s;
+}
+
+/* Mini hover scaling for maps */
+[id^="mini-map-"]:hover iframe {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+/* Newsletter hover improvements */
+form input:focus,
+form button:hover {
+  outline: none;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+/* Trending badge */
+.trending-badge {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  background: #2563eb;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover scale for trending images */
+.trending-image:hover {
+  transform: scale(1.08);
+  transition: transform 0.4s ease;
+}
+.trending-image {
+  transition: transform 0.4s ease;
+} /* ================== TESTIMONIAL CARD HOVER EFFECTS ================== */
+.testimonial-card-hover {
+  transition: all 0.4s ease;
+  cursor: pointer;
+  border-radius: 1.25rem;
+  background: #fff;
+}

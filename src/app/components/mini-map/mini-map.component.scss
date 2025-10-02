@@ -1,0 +1,73 @@
+/* Mini Map Container */
+.mini-map-container {
+  border-radius: 1rem; // rounded-xl
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); // shadow-lg
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Custom Leaflet Marker */
+.custom-leaflet-marker {
+  .marker-pin {
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #06b6d4, #0ea5e9); // Teal/Ocean Blue gradient
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    position: relative;
+    animation: pulse-marker 2s infinite;
+    cursor: pointer;
+  }
+
+  .marker-dot {
+    width: 10px;
+    height: 10px;
+    background-color: #f97316; // Coral/Orange dot
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+}
+
+/* Pulse animation for marker */
+@keyframes pulse-marker {
+  0% {
+    transform: rotate(-45deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: rotate(-45deg) scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: rotate(-45deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Leaflet Popup Styling */
+.leaflet-popup-content-wrapper {
+  background: #f8fafc; // Soft Beige background
+  color: #1f2937; // Dark gray text
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-popup-tip {
+  background: #f8fafc;
+}
+
+/* Optional: make map fully responsive */
+@media (max-width: 768px) {
+  .mini-map-container {
+    height: 16rem; // smaller on mobile
+  }
+}

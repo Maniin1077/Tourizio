@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "target": "es2022",                       // Modern JS target
+    "module": "es2022",                       // ES modules
+    "moduleResolution": "node",               // Node module resolution
+    "emitDecoratorMetadata": true,            // Required for Angular decorators
+    "experimentalDecorators": true,           // Enable decorators
+    "strict": true,                           // Enable strict type-checking
+    "skipLibCheck": true,                     // Skip type checking of library files
+    "forceConsistentCasingInFileNames": true, // Prevent file name casing issues
+    "types": []                               // No extra global types
+  },
+  "files": [
+    "src/main.ts",
+  ],
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/test.ts",
+    "src/**/*.spec.ts"
+  ]
+}
