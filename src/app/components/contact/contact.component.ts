@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
-export class ContactComponent {
-  // Web3Forms access key (replace with your own)
+export class ContactComponent implements OnInit {
+  // Web3Forms access key (replace with your actual key)
   web3formsKey = 'ed7befcf-3cfe-405c-a6b8-b871ea4ea2ff';
 
   // Contact form model
@@ -26,18 +26,37 @@ export class ContactComponent {
 
   constructor(private http: HttpClient) {}
 
+  ngOnInit() {
+    // Load previously saved data from local storage
+    const saved = localStorage.getItem('contactFormData');
+    if (saved) {
+      this.contact = JSON.parse(saved);
+    }
+  }
+
   /**
-   * Submit contact form
+   * Save form data in local storage on every input change
+   */
+  saveToLocalStorage() {
+    localStorage.setItem('contactFormData', JSON.stringify(this.contact));
+  }
+
+  /**
+   * Submit contact form to Web3Forms API
    */
   async submitContact() {
     if (this.isSubmitting) return; // Prevent multiple submissions
+    if (!this.contact.name || !this.contact.email || !this.contact.message) {
+      this.showErrorMessage = true;
+      setTimeout(() => (this.showErrorMessage = false), 4000);
+      return;
+    }
 
     this.isSubmitting = true;
     this.showSuccessMessage = false;
     this.showErrorMessage = false;
 
     try {
-      // Prepare form data
       const formData = new FormData();
       formData.append('access_key', this.web3formsKey);
       formData.append('name', this.contact.name);
@@ -49,25 +68,24 @@ export class ContactComponent {
       formData.append('from_name', this.contact.name);
       formData.append('reply_to', this.contact.email);
 
-      // POST request to Web3Forms
-      const response: any = await this.http.post('https://api.web3forms.com/submit', formData).toPromise();
+      const response: any = await this.http
+        .post('https://api.web3forms.com/submit', formData)
+        .toPromise();
 
       if (response.success) {
         this.showSuccessMessage = true;
         this.resetForm();
+        localStorage.removeItem('contactFormData');
       } else {
         throw new Error(response.message || 'Submission failed');
       }
 
-      // Auto-hide success message after 5s
-      setTimeout(() => this.showSuccessMessage = false, 5000);
-
+      // Auto-hide success message
+      setTimeout(() => (this.showSuccessMessage = false), 5000);
     } catch (error) {
       console.error('Error submitting form:', error);
       this.showErrorMessage = true;
-
-      // Auto-hide error message after 5s
-      setTimeout(() => this.showErrorMessage = false, 5000);
+      setTimeout(() => (this.showErrorMessage = false), 5000);
     } finally {
       this.isSubmitting = false;
     }

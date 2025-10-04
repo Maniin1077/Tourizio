@@ -1,167 +1,92 @@
-/* =======================
-   Footer Theme Variables
-======================= */
-$primary-color: #008080;      // Teal / Ocean Blue
-$secondary-color: #FF6B6B;    // Coral / Sunset Orange
-$footer-bg: #004D66;           // Dark Teal Blue
-$footer-text: #E0F7FA;         // Light Cyan
-$footer-bg-dark-10: #00384C;   // Approx darken 10%
-$footer-bg-light-10: #006680;  // Approx lighten 10%
-$footer-text-light-15: #F2FBFC; // Approx lighten 15%
+/* ============================
+   Modern Footer Styling
+============================ */
+$teal-dark: #004d66;
+$teal-light: #e0f7fa;
+$coral: #ff6b6b;
+$coral-light: #ff8a65;
 $transition: 0.3s ease-in-out;
 
-/* =======================
-   Footer Base Styles
-======================= */
 footer {
-  background-color: $footer-bg;
-  color: $footer-text;
-  padding: 2rem 1.5rem;
+  background: linear-gradient(to bottom, #002b36, #004d66);
+  color: $teal-light;
   font-family: 'Open Sans', sans-serif;
   position: relative;
+  overflow: hidden;
 
-  h2,
-  h3 {
+  h2, h3 {
     font-family: 'Times New Roman', serif;
+    letter-spacing: 0.5px;
   }
 
   a {
+    color: $teal-light;
     transition: all $transition;
     &:hover {
-      color: $secondary-color;
-      text-decoration: underline;
+      color: $coral;
+      text-decoration: none;
     }
   }
 
-  /* Footer Grid */
-  .grid {
-    display: grid;
-    gap: 1.5rem;
-  }
+  .footer-link {
+    display: inline-block;
+    position: relative;
+    font-weight: 500;
+    letter-spacing: 0.2px;
 
-  /* Social Icons */
-  .social-icons {
-    display: flex;
-    gap: 0.5rem;
-
-    a {
-      width: 2.25rem;
-      height: 2.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background-color: $footer-bg-dark-10;
-      transition: transform $transition, background-color $transition;
-
-      &:hover {
-        transform: scale(1.1);
-        background: linear-gradient(45deg, $primary-color, $secondary-color);
-
-        svg {
-          color: #fff;
-        }
-      }
-
-      svg {
-        width: 1.25rem;
-        height: 1.25rem;
-        color: $footer-text;
-      }
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 1px;
+      background: $coral;
+      transition: width $transition;
     }
-  }
-
-  /* =======================
-     Newsletter Section
-  ======================= */
-  .newsletter {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-
-    input {
-      padding: 0.5rem 1rem;
-      border-radius: 9999px;
-      border: none;
-      outline: none;
+    &:hover::after {
       width: 100%;
-      max-width: 300px;
-      transition: box-shadow $transition;
+    }
+  }
 
+  .newsletter {
+    input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
       &:focus {
-        box-shadow: 0 0 0 3px rgba($primary-color, 0.3);
+        border-color: $coral;
+        box-shadow: 0 0 0 3px rgba($coral, 0.3);
       }
     }
 
     button {
-      margin-top: 0.5rem;
-      padding: 0.5rem 1.5rem;
-      border-radius: 9999px;
-      border: none;
-      background: linear-gradient(90deg, $primary-color, $secondary-color);
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all $transition;
-      max-width: 150px;
-
+      background: linear-gradient(90deg, $coral, $coral-light);
+      font-weight: 600;
+      letter-spacing: 0.3px;
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba($primary-color, 0.3);
+        box-shadow: 0 4px 15px rgba($coral, 0.3);
       }
     }
+  }
 
-    .success-message,
-    .error-message {
-      font-weight: 600;
+  /* Success/Error Animation */
+  @keyframes fade {
+    from {
       opacity: 0;
-      animation: fadeIn 0.5s forwards;
+      transform: translateY(-5px);
     }
-
-    .success-message {
-      color: #4CAF50;
-    }
-
-    .error-message {
-      color: #FF5252;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
-  /* =======================
-     Bottom Bar
-  ======================= */
-  .bottom-bar {
-    border-top: 1px solid $footer-bg-light-10;
-    margin-top: 2rem;
-    padding-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    font-size: 0.75rem;
-    color: $footer-text-light-15;
-    justify-content: space-between;
-
-    a:hover {
-      color: $secondary-color;
-    }
-
-    @media (min-width: 768px) {
-      flex-direction: row;
-    }
-  }
-}
-
-/* =======================
-   FadeIn Animation
-======================= */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .animate-fade {
+    animation: fade 0.5s ease-out;
   }
 }

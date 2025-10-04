@@ -1,61 +1,68 @@
-<footer class="footer bg-teal-900 text-teal-100 mt-auto font-open-sans">
-  <div class="max-w-7xl mx-auto px-6 py-8">
-    
-    <!-- Main Footer Grid -->
-    <div class="grid md:grid-cols-3 gap-8">
-      
-      <!-- Brand / About -->
-      <div class="footer-brand">
-        <h2 class="text-2xl font-times text-white mb-2">Tourizio</h2>
+<footer class="footer bg-gradient-to-b from-teal-950 via-teal-900 to-teal-800 text-teal-100 mt-auto font-open-sans shadow-inner">
+  <div class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- ===== Main Footer Grid ===== -->
+    <div class="grid md:grid-cols-3 gap-10">
+
+      <!-- ===== Brand / About Section ===== -->
+      <div class="footer-brand space-y-3">
+        <h2 class="text-3xl font-times text-white font-semibold tracking-wide">Tourizio</h2>
         <p class="text-sm text-teal-200 leading-relaxed">
-          Discover India's hidden gems with curated travel experiences and seamless booking.
+          Discover India's hidden gems through curated travel experiences and seamless booking.
         </p>
-        <p class="mt-3 text-sm text-teal-200 font-medium">Follow us:</p>
-        <div class="flex space-x-3 mt-1">
-          <a href="https://x.com/" aria-label="Twitter" class="social-icon hover:text-teal-400 transition" target="_blank" rel="noopener">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a href="https://www.instagram.com/" aria-label="Instagram" class="social-icon hover:text-teal-400 transition" target="_blank" rel="noopener">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="https://www.facebook.com/" aria-label="Facebook" class="social-icon hover:text-teal-400 transition" target="_blank" rel="noopener">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="https://www.youtube.com/" aria-label="YouTube" class="social-icon hover:text-teal-400 transition" target="_blank" rel="noopener">
-            <i class="fab fa-youtube"></i>
-          </a>
+
+        <!-- Social Links -->
+        <div class="pt-2">
+          <p class="text-sm text-teal-300 font-medium mb-2">Follow us</p>
+          <div class="flex gap-3">
+            <a href="https://x.com/" aria-label="Twitter" class="hover:text-coral-400 transition" target="_blank">
+              <i class="fab fa-twitter text-xl"></i>
+            </a>
+            <a href="https://www.instagram.com/" aria-label="Instagram" class="hover:text-coral-400 transition" target="_blank">
+              <i class="fab fa-instagram text-xl"></i>
+            </a>
+            <a href="https://www.facebook.com/" aria-label="Facebook" class="hover:text-coral-400 transition" target="_blank">
+              <i class="fab fa-facebook-f text-xl"></i>
+            </a>
+            <a href="https://www.youtube.com/" aria-label="YouTube" class="hover:text-coral-400 transition" target="_blank">
+              <i class="fab fa-youtube text-xl"></i>
+            </a>
+          </div>
         </div>
       </div>
 
-      <!-- Quick Links -->
+      <!-- ===== Quick Links ===== -->
       <nav class="footer-links" aria-label="Quick Links">
-        <h3 class="text-white font-semibold mb-2 uppercase tracking-wide">Navigate</h3>
-        <ul class="space-y-1 text-sm">
-          <li><a routerLink="/" class="footer-link hover:text-teal-400">Home</a></li>
-          <li><a routerLink="/destinations" class="footer-link hover:text-teal-400">Destinations</a></li>
-          <li><a routerLink="/booking" class="footer-link hover:text-teal-400">Booking</a></li>
-          <li><a routerLink="/contact" class="footer-link hover:text-teal-400">Contact</a></li>
+        <h3 class="text-white font-semibold mb-3 uppercase tracking-wide border-b border-teal-700 pb-1 w-fit">
+          Navigate
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li><a routerLink="/" class="footer-link hover:text-coral-400 transition">Home</a></li>
+          <li><a routerLink="/destinations" class="footer-link hover:text-coral-400 transition">Destinations</a></li>
+          <li><a routerLink="/booking" class="footer-link hover:text-coral-400 transition">Booking</a></li>
+          <li><a routerLink="/contact" class="footer-link hover:text-coral-400 transition">Contact</a></li>
         </ul>
       </nav>
 
-      <!-- Contact & Newsletter -->
+      <!-- ===== Contact & Newsletter ===== -->
       <div class="footer-contact">
-        <h3 class="text-white font-semibold mb-2 uppercase tracking-wide">Connect & Subscribe</h3>
-        <p class="text-teal-200 mb-2">
-          <a href="mailto:support&#64;tourizio.com" class="hover:text-teal-400">support&#64;tourizio.com</a>
-        </p>
-        <p class="text-teal-200 mb-2">
-          <a href="tel:+15551234567" class="hover:text-teal-400">+1 (555) 123-4567</a>
-        </p>
-        <p class="text-teal-300 mb-4">Tourism Street, Travel City</p>
+        <h3 class="text-white font-semibold mb-3 uppercase tracking-wide border-b border-teal-700 pb-1 w-fit">
+          Connect & Subscribe
+        </h3>
 
-        <!-- Newsletter Signup -->
-        <div class="newsletter flex flex-col sm:flex-row gap-2">
+        <div class="space-y-2 text-sm">
+          <a href="mailto:support&#64;tourizio.com" class="hover:text-coral-400">support&#64;tourizio.com</a><br>
+          <a href="tel:+15551234567" class="hover:text-coral-400">+1 (555) 123-4567</a><br>
+          <span class="text-teal-300">Tourism Street, Travel City</span>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="newsletter flex flex-col sm:flex-row gap-2 mt-4">
           <input
             type="email"
             [(ngModel)]="newsletterEmail"
-            placeholder="Your email"
-            class="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-500 transition"
+            placeholder="Enter your email"
+            class="p-2 px-3 rounded-md bg-teal-950 border border-teal-700 focus:outline-none focus:ring-2 focus:ring-coral-400 transition"
             aria-label="Email for newsletter subscription"
           />
           <button
@@ -65,27 +72,31 @@
             Subscribe
           </button>
         </div>
+
         <p *ngIf="newsletterSuccess" class="text-green-400 mt-2 animate-fade">Subscribed successfully!</p>
         <p *ngIf="newsletterError" class="text-red-400 mt-2 animate-fade">Please enter a valid email.</p>
       </div>
     </div>
 
-    <!-- Download App Section -->
-    <div class="flex items-center gap-4 mt-8">
-      <a href="https://play.google.com/store/apps/" target="_blank" rel="noopener" aria-label="Download from Google Play">
-        <img src="assets/images/googlePlay.svg" alt="Google Play Store" class="h-10 w-auto hover:scale-105 transition-transform"/>
+    <!-- ===== Divider ===== -->
+    <div class="border-t border-teal-700 mt-10"></div>
+
+    <!-- ===== App Store Buttons ===== -->
+    <div class="flex justify-center sm:justify-start items-center gap-5 mt-6">
+      <a href="https://play.google.com/store/apps/" target="_blank" rel="noopener">
+        <img src="assets/images/googlePlay.svg" alt="Google Play Store" class="h-10 hover:scale-105 transition-transform"/>
       </a>
-      <a href="https://apps.apple.com/app/" target="_blank" rel="noopener" aria-label="Download from App Store">
-        <img src="assets/images/appStore.svg" alt="Apple App Store" class="h-10 w-auto hover:scale-105 transition-transform"/>
+      <a href="https://apps.apple.com/app/" target="_blank" rel="noopener">
+        <img src="assets/images/appStore.svg" alt="Apple App Store" class="h-10 hover:scale-105 transition-transform"/>
       </a>
     </div>
 
-    <!-- Bottom Bar -->
-    <div class="border-t border-teal-700 mt-6 pt-4 flex flex-col md:flex-row justify-between items-center text-xs text-teal-300">
-      <p>© 2025 Tourizio. All rights reserved.</p>
-      <div class="flex space-x-4 mt-2 md:mt-0">
-        <a href="#" class="footer-link hover:text-teal-400">Privacy Policy</a>
-        <a href="#" class="footer-link hover:text-teal-400">Terms of Service</a>
+    <!-- ===== Bottom Bar ===== -->
+    <div class="mt-8 flex flex-col md:flex-row justify-between items-center text-xs text-teal-400 gap-3 border-t border-teal-800 pt-4">
+      <p>© 2025 <span class="text-coral-400 font-semibold">Tourizio</span>. All rights reserved.</p>
+      <div class="flex space-x-4">
+        <a href="#" class="hover:text-coral-400">Privacy Policy</a>
+        <a href="#" class="hover:text-coral-400">Terms of Service</a>
       </div>
     </div>
   </div>

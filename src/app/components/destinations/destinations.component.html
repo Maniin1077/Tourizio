@@ -7,10 +7,10 @@
     class="absolute inset-0 bg-black/40 flex flex-col justify-center items-center text-center text-white px-4 hero-parallax"
   >
     <h1 class="text-4xl md:text-5xl font-bold mb-2">
-      Explore Your Dream Destination
+      Discover Top-Rated Travel Destinations
     </h1>
     <p class="text-lg md:text-2xl">
-      Discover amazing places and plan your perfect trip
+      From exotic escapes to cultural gems — find your perfect getaway today.
     </p>
   </div>
 </div>
@@ -224,17 +224,6 @@
   </div>
 </div>
 
-<!-- Destination Dropdown (Hidden when searching) -->
-<div *ngIf="!searchedPlaces.length" class="flex justify-center mb-6">
-  <select
-    (change)="onSelectDestination($event.target.value)"
-    class="mb-6 p-4 border-2 border-blue-600 rounded-xl shadow-lg w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  >
-    <option value="">-- View More Destinations --</option>
-    <option *ngFor="let d of destinations" [value]="d">{{ d }}</option>
-  </select>
-</div>
-
 <!-- Type Filter Dropdown (Hidden when searching) -->
 <div
   class="flex justify-center mb-10 gap-4"
@@ -262,19 +251,6 @@
     *ngFor="let p of filteredPlaces"
     class="bg-white rounded-xl shadow-lg overflow-hidden relative hover:shadow-2xl transform transition duration-300 hover:-translate-y-1"
   >
-    <!-- Favorite Button -->
-    <button
-      (click)="toggleFavorite(p)"
-      class="absolute top-2 right-2 z-10 text-red-400 hover:text-red-500 transition text-xl md:text-2xl"
-    >
-      <i
-        class="fa"
-        [ngClass]="{
-          'fa-heart': isFavorite(p),
-          'fa-heart-o': !isFavorite(p),
-        }"
-      ></i>
-    </button>
 
     <!-- Image wrapper with skeleton -->
     <div class="relative w-full h-56 rounded-t-xl overflow-hidden">
@@ -329,65 +305,42 @@
   </div>
 </div>
 
-<!-- Favorites Section -->
-<div *ngIf="favoritePlaces.length > 0" class="max-w-6xl mx-auto py-12 px-4">
-  <h2 class="text-3xl font-bold mb-8 text-center">Your Favorites</h2>
-  <div class="grid md:grid-cols-3 gap-8">
-    <div
-      *ngFor="let fav of favoritePlaces"
-      class="bg-white rounded-xl shadow-lg overflow-hidden relative hover:shadow-2xl transform transition duration-300 hover:-translate-y-1"
+<!-- ===================== NEWSLETTER SECTION ===================== -->
+<section
+  class="newsletter-section mx-auto my-20 max-w-3xl px-6 py-12 scroll-reveal"
+>
+  <h2 class="text-3xl font-bold mb-3">Get Travel Updates</h2>
+  <p class="text-gray-100 mb-6 text-base md:text-lg">
+    Subscribe to our newsletter for exclusive deals, expert guides, and insider travel tips.
+  </p>
+
+  <form
+    (submit)="submitNewsletter()"
+    class="flex flex-col sm:flex-row gap-3 justify-center"
+  >
+    <input
+      type="email"
+      placeholder="Enter your email address"
+      [(ngModel)]="newsletterEmail"
+      name="newsletterEmail"
+      required
+      class="px-4 py-3 rounded-lg w-full sm:w-2/3"
+    />
+    <button
+      type="submit"
+      class="px-6 py-3 rounded-lg text-white"
     >
-      <!-- Favorite Button -->
-      <button
-        (click)="toggleFavorite(fav)"
-        class="absolute top-2 right-2 z-10 text-red-500 text-xl md:text-2xl hover:text-gray-400 transition"
-      >
-        <i class="fa fa-heart"></i>
-      </button>
+      Subscribe
+    </button>
+  </form>
 
-      <!-- Image wrapper -->
-      <div class="relative w-full h-56 rounded-t-xl overflow-hidden">
-        <ng-container *ngIf="fav.image; else loadingSkeleton">
-          <img
-            [src]="fav.image"
-            [alt]="fav.name"
-            class="w-full h-full object-cover"
-          />
-        </ng-container>
-        <ng-template #loadingSkeleton>
-          <div class="skeleton w-full h-full"></div>
-        </ng-template>
-      </div>
-
-      <div class="p-6 flex flex-col">
-        <h4 class="text-xl font-semibold mb-1">{{ fav.name }}</h4>
-        <p class="text-gray-600 mb-4">{{ fav.location }}</p>
-
-        <p class="text-green-600 font-bold mb-4">
-          ₹{{ fav.price }}
-          <span *ngIf="fav.days" class="ml-3">
-            <span class="text-gray-400">•&nbsp;</span>
-            <span class="text-green-600">{{ fav.days }}</span>
-            <span class="text-green-600 font-bold">
-              {{ fav.days === 1 ? " day" : " days" }}
-            </span>
-          </span>
-        </p>
-
-        <div class="flex gap-3">
-          <button
-            (click)="onBookNow(fav.id)"
-            class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
-          >
-            Book Now
-          </button>
-          <button
-            class="flex-1 bg-gray-200 text-blue-700 py-2 px-4 rounded-lg hover:bg-blue-100 font-semibold transition"
-          >
-            View Details
-          </button>
-        </div>
-      </div>
-    </div>
+  <div *ngIf="newsletterSuccess" class="text-green-300 mt-4 animate-fade">
+    🎉 You’re subscribed! Check your inbox for updates.
   </div>
-</div>
+  <div *ngIf="newsletterError" class="text-red-300 mt-4 animate-fade">
+    ❌ Please enter a valid email address.
+  </div>
+
+  <p class="mt-6 text-gray-300 text-sm italic">
+    We respect your privacy. You can unsubscribe at any time.
+  </p>

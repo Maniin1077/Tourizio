@@ -44,6 +44,10 @@ export class DestinationsComponent
   private readonly PEXELS_API_KEY =
     'lziGnbzjpGpnwAGAu1KYKuJghDSuOVfworDozfcEESqesyoebEOalcTq';
 
+  newsletterEmail: string = '';
+  newsletterSuccess = false;
+  newsletterError = false;
+
   // Scroll Reveal
   private scrollRevealElements: NodeListOf<Element> | null = null;
   private scrollListener: (() => void) | null = null;
@@ -561,4 +565,20 @@ export class DestinationsComponent
       this.initializeMaps();
     }, 200);
   }
+  // ===== NEWSLETTER =====
+  submitNewsletter() {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (this.newsletterEmail.match(emailPattern)) {
+      this.newsletterSuccess = true;
+      this.newsletterError = false;
+      localStorage.setItem('newsletterEmail', this.newsletterEmail);
+      this.newsletterEmail = '';
+      setTimeout(() => (this.newsletterSuccess = false), 4000);
+    } else {
+      this.newsletterError = true;
+      this.newsletterSuccess = false;
+    }
+  }
+
 }

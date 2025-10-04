@@ -199,6 +199,55 @@ form button:hover {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* ===============================
+   NEWSLETTER SECTION
+=============================== */
+$teal-dark: #004d66;
+$teal-light: #006f8a;
+$coral: #ff6b6b;
+$coral-light: #ff8a65;
+
+.newsletter-section {
+  background: linear-gradient(135deg, $teal-dark, $teal-light);
+  border-radius: 1.25rem;
+  color: #e0f7fa;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.6s ease-in-out;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  h2 {
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  p {
+    color: #c1e8ea;
+  }
+
+  input {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 0.8rem 1rem;
+    border-radius: 0.75rem;
+    width: 100%;
+    transition: all 0.3s ease;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    &:focus {
+      border-color: $coral;
+      box-shadow: 0 0 0 3px rgba($coral, 0.3);
+      outline: none;
+    }
+  }
+}
+
 /* Hover scale for trending images */
 .trending-image:hover {
   transform: scale(1.08);

@@ -1,9 +1,9 @@
 /* =========================================
    Variables
 ========================================= */
-$primary-color: #0f766e; /* Teal / Ocean Blue */
-$secondary-color: #f97316; /* Coral / Sunset Orange */
-$bg-color: #ffffff; /* Soft Beige / Light Gray */
+$primary-color: #0f766e; /* Teal */
+$secondary-color: #f97316; /* Orange */
+$bg-color: #ffffff; /* Page background */
 $input-bg: #f3f4f6;
 $font-heading: "Times New Roman", serif;
 $font-body: "Open Sans", sans-serif;
@@ -16,13 +16,20 @@ $font-body: "Open Sans", sans-serif;
   font-family: $font-body;
   background-color: $bg-color;
   padding: 2rem 1rem;
+  min-height: 100vh;
 
-  .shadow-card {
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+  .booking-card {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+      transform: translateY(-3px);
     }
   }
 
@@ -30,77 +37,120 @@ $font-body: "Open Sans", sans-serif;
     font-family: $font-heading;
     color: $primary-color;
     font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
   }
 
   p {
-    font-family: $font-body;
-    color: #4b5563; /* Gray-700 */
+    text-align: center;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
   }
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.2rem;
 
     label {
       font-family: $font-heading;
       color: $primary-color;
+      font-size: 1rem;
     }
 
     /* ==========================
-       Input Fields
+       Input Wrapper
     ========================== */
     .relative {
       position: relative;
       display: flex;
-      align-items: center; /* ✅ vertical centering */
+      align-items: center;
     }
 
-    .relative input {
+    input,
+    select {
       flex: 1;
-      padding: 0.6rem 0.75rem 0.6rem 2.8rem; /* ✅ added spacing between icon & text */
+      padding: 0.65rem 0.75rem 0.65rem 2.8rem;
       border-radius: 0.5rem;
-      border: 1px solid #125bc8;
+      border: 1px solid #cbd5e1;
       background-color: $input-bg;
       font-family: $font-body;
       font-size: 1rem;
       height: 44px;
-      line-height: 1.5rem;
       width: 100%;
       transition: all 0.3s ease;
 
       &:focus {
         outline: none;
         border-color: $primary-color;
-        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2);
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.25);
         background-color: #ffffff;
       }
     }
 
-    /* ✅ Fix for "No. of people" input merging issue */
-    .relative input[type="number"] {
-      padding-left: 3.4rem; /* extra spacing for icon + placeholder */
-      -moz-appearance: textfield; /* remove spinners in Firefox */
+    input[type="number"] {
+      -moz-appearance: textfield;
+      padding-left: 3.4rem;
     }
-
-    /* ✅ Remove spinners in Chrome, Safari, Edge, Opera */
-    .relative input[type="number"]::-webkit-outer-spin-button,
-    .relative input[type="number"]::-webkit-inner-spin-button {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
 
-    .relative i {
+    i {
       position: absolute;
       left: 0.8rem;
       color: #0f56d0;
-      font-size: 1.2rem;    /* ✅ proportional to input text */
-      pointer-events: none; /* doesn’t block typing */
-      line-height: 1;       /* avoids stretching */
+      font-size: 1.2rem;
+      pointer-events: none;
     }
 
     /* ==========================
-       Button Styles
+       Destination Autocomplete
+    ========================== */
+    .destination-dropdown {
+      position: relative;
+
+      .dropdown-list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 180px;
+        overflow-y: auto;
+        background: #fff;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        margin-top: 0.3rem;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        z-index: 50;
+
+        li {
+          padding: 0.7rem 1rem;
+          font-size: 0.95rem;
+          color: #374151;
+          cursor: pointer;
+          transition: background 0.2s ease;
+
+          &:hover {
+            background: rgba($primary-color, 0.1);
+          }
+        }
+
+        /* Scrollbar */
+        &::-webkit-scrollbar {
+          width: 6px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba($primary-color, 0.5);
+          border-radius: 5px;
+        }
+      }
+    }
+
+    /* ==========================
+       Submit Button
     ========================== */
     button {
       font-family: $font-heading;
@@ -115,11 +165,12 @@ $font-body: "Open Sans", sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1rem;
 
       &:hover:not(:disabled) {
         background: linear-gradient(90deg, $secondary-color, $primary-color);
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
       }
 
       &:disabled {
@@ -134,7 +185,7 @@ $font-body: "Open Sans", sans-serif;
     }
   }
 
-  /* Loader inside button */
+  /* Spinner Animation */
   .animate-spin {
     animation: spin 1s linear infinite;
   }
@@ -148,18 +199,22 @@ $font-body: "Open Sans", sans-serif;
     }
   }
 
-  /* Responsive */
+  /* ==========================
+     Responsive Layout
+  ========================== */
   @media (min-width: 768px) {
-    :host {
-      padding: 3rem 2rem;
+    padding: 3rem 2rem;
+
+    .booking-card {
+      padding: 2.5rem 3rem;
+    }
+
+    h2 {
+      font-size: 2.2rem;
     }
   }
 
-  /* Smooth transitions */
   * {
     transition: all 0.3s ease;
   }
 }
-/* =========================================
-   End of Booking Component Styles
-========================================= */
