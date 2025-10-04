@@ -1,0 +1,40 @@
+{
+  "featuredDestinations": [
+    {
+      "name": "Taj Mahal",
+      "location": "Agra",
+      "image": "assets/images/taj-mahal.jpg",
+      "description": "Marvel at the iconic white marble mausoleum in Agra."
+    },
+    {
+      "name": "Ladakh",
+      "location": "Jammu and Kashmir",
+      "image": "assets/images/ladakh.jpg",
+      "description": "Experience the breathtaking landscapes and unique culture of Ladakh."
+    },
+    {
+      "name": "Varanasi Ghats",
+      "location": "Varanasi",
+      "image": "assets/images/Varanasi.jpg",
+      "description": "Witness the spiritual rituals along the sacred Ganges."
+    },
+    {
+      "name": "Kerala Backwaters",
+      "location": "Kerala",
+      "image": "assets/images/kerala.webp",
+      "description": "Relax in the serene backwaters of God’s Own Country."
+    },
+    {
+      "name": "Goa Beaches",
+      "location": "Goa",
+      "image": "assets/images/goa.jpg",
+      "description": "Relax on the sunny beaches and enjoy vibrant nightlife."
+    },
+    {
+      "name": "Mysore Palace",
+      "location": "Karnataka",
+      "image": "assets/images/mysore-palace.jpg",
+      "description": "Explore the opulent Mysore Palace, a stunning example of Indo-Saracenic architecture."
+    }
+  ]
+}

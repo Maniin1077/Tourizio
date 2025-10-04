@@ -1,0 +1,139 @@
+/* =========================================
+   Variables
+========================================= */
+$primary-color: #0f766e; /* Teal / Ocean Blue */
+$secondary-color: #f97316; /* Coral / Sunset Orange */
+$bg-color: #fdf7f0; /* Soft Beige / Light Gray */
+$input-bg: #f3f4f6;
+$font-heading: "Times New Roman", serif;
+$font-body: "Open Sans", sans-serif;
+
+/* =========================================
+   Global Styles for Booking Component
+========================================= */
+:host {
+  display: block;
+  font-family: $font-body;
+  background-color: $bg-color;
+  padding: 2rem 1rem;
+
+  .shadow-card {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  h2 {
+    font-family: $font-heading;
+    color: $primary-color;
+    font-size: 2rem;
+  }
+
+  p {
+    font-family: $font-body;
+    color: #4b5563; /* Gray-700 */
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    label {
+      font-family: $font-heading;
+      color: $primary-color;
+    }
+
+    input {
+      font-family: $font-body;
+      padding: 0.6rem 0.75rem 0.6rem 2.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #d1d5db;
+      background-color: $input-bg;
+      width: 100%;
+      transition: all 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2);
+        background-color: #fff;
+      }
+    }
+
+    .relative {
+      position: relative;
+
+      i {
+        position: absolute;
+        top: 50%;
+        left: 0.75rem;
+        transform: translateY(-50%);
+        color: #9ca3af; /* Gray-400 */
+      }
+    }
+
+    button {
+      font-family: $font-heading;
+      font-weight: 600;
+      background: linear-gradient(90deg, $primary-color, $secondary-color);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover:not(:disabled) {
+        background: linear-gradient(90deg, $secondary-color, $primary-color);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      &:disabled {
+        background-color: #9ca3af;
+        cursor: not-allowed;
+      }
+
+      svg {
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+    }
+  }
+
+  /* Loader inside button */
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    :host {
+      padding: 3rem 2rem;
+    }
+  }
+
+  /* Smooth transitions */
+  * {
+    transition: all 0.3s ease;
+  }
+}
+/* =========================================
+   End of Booking Component Styles
+========================================= */

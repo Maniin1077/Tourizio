@@ -1,0 +1,204 @@
+// =======================
+// Theme Variables
+// =======================
+$primary: #008080; // Teal/Ocean Blue
+$secondary: #ff6f61; // Coral/Sunset Orange
+$background: #f9f9f7; // Soft Beige/Light Gray
+$text-dark: #333;
+$text-light: #fff;
+
+$font-heading: 'Times New Roman', serif;
+$font-body: 'Open Sans', sans-serif;
+
+// =======================
+// Global container
+// =======================
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: $background;
+  font-family: $font-body;
+}
+
+// =======================
+// Backdrop / Overlay Fix
+// =======================
+.backdrop-blur-md {
+  pointer-events: none; // ✅ ensure overlay never blocks form
+}
+
+// =======================
+// Form Card
+// =======================
+.login-form-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 400px;
+  background: $text-light;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.6s ease;
+
+  h2 {
+    font-family: $font-heading;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: $primary;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// =======================
+// Input Fields
+// =======================
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  font-family: $font-body;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+    box-shadow: 0 0 6px rgba($primary, 0.4);
+  }
+}
+
+// =======================
+// Password Toggle Icon
+// =======================
+.password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $primary;
+  }
+}
+
+// =======================
+// Buttons
+// =======================
+button[type="submit"],
+.google-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.75rem;
+  font-family: $font-body;
+}
+
+// Gradient Sign In Button
+button[type="submit"] {
+  background: linear-gradient(135deg, $primary, $secondary);
+  color: $text-light;
+  border: none;
+  box-shadow: 0 4px 12px rgba($primary, 0.3);
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba($primary, 0.4);
+  }
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+// Google Button
+.google-btn {
+  background: #fff;
+  border: 1px solid #ddd;
+  color: $text-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: #f8f8f8;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// =======================
+// OR Divider
+// =======================
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+
+  hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+
+  span {
+    margin: 0 1rem;
+    font-size: 0.85rem;
+    color: #888;
+  }
+}
+
+// =======================
+// Footer Links
+// =======================
+.footer-text {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+
+  span {
+    color: $secondary;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover {
+      text-decoration: underline;
+      color: darken($secondary, 10%);
+    }
+  }
+}
+
+// =======================
+// Animations
+// =======================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

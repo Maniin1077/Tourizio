@@ -1,0 +1,67 @@
+<nav class="navbar sticky top-0 z-50 shadow-sm">
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <a routerLink="/">
+        <i class="fas fa-route icon-gradient"></i>
+        <span>Tourizio</span>
+      </a>
+    </div>
+
+    <!-- Desktop Menu -->
+    <div class="menu md:flex hidden">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a routerLink="/destinations" routerLinkActive="active">Destinations</a>
+      <a routerLink="/booking" routerLinkActive="active">Booking</a>
+      <a routerLink="/contact" routerLinkActive="active">Contact</a>
+    </div>
+
+    <!-- Auth / User -->
+    <div class="auth md:flex hidden">
+      <ng-container *ngIf="user$ | async as user; else authButtons">
+        <div class="profile" (click)="toggleProfileMenu()">
+          <img *ngIf="user.photoURL" [src]="user.photoURL" class="avatar" />
+          <i *ngIf="!user.photoURL" class="fas fa-user-circle avatar"></i>
+          <span>{{ user.displayName || user.email }}</span>
+        </div>
+        <div *ngIf="showProfileMenu" class="profile-dropdown">
+          <button (click)="goToProfile()"><i class="fas fa-user-circle"></i> Profile</button>
+          <button (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+      </ng-container>
+      <ng-template #authButtons>
+        <a routerLink="/login" class="btn-outline">Login</a>
+        <a routerLink="/signup" class="btn-gradient">Sign Up</a>
+      </ng-template>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <div class="mobile-menu-button md:hidden" (click)="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div *ngIf="menuOpen" class="mobile-menu md:hidden">
+    <a routerLink="/" routerLinkActive="active">Home</a>
+    <a routerLink="/destinations" routerLinkActive="active">Destinations</a>
+    <a routerLink="/booking" routerLinkActive="active">Booking</a>
+    <a routerLink="/contact" routerLinkActive="active">Contact</a>
+    <hr />
+    <ng-container *ngIf="user$ | async as user; else mobileAuth">
+      <div class="mobile-profile" (click)="toggleProfileMenu()">
+        <img *ngIf="user.photoURL" [src]="user.photoURL" class="avatar" />
+        <i *ngIf="!user.photoURL" class="fas fa-user-circle avatar"></i>
+        <span>{{ user.displayName || user.email }}</span>
+      </div>
+      <div *ngIf="showProfileMenu" class="mobile-dropdown">
+        <button (click)="goToProfile()">Profile</button>
+        <button (click)="logout()">Logout</button>
+      </div>
+    </ng-container>
+    <ng-template #mobileAuth>
+      <a routerLink="/login" class="btn-outline">Login</a>
+      <a routerLink="/signup" class="btn-gradient">Sign Up</a>
+    </ng-template>
+  </div>
+</nav>
