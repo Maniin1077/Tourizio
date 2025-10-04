@@ -15,15 +15,15 @@ html, body {
   width: 100%;
   min-height: 100%;
   font-family: 'Open Sans', 'Poppins', sans-serif;
-  background-color: #f8f6f0; /* Soft Beige background */
+  background-color: #dbe7c1; /* Soft Beige background */
   scroll-behavior: smooth;
-  color: #1f2937; /* Default text color */
+  color: #371f1f; /* Default text color */
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Times New Roman', serif;
   font-weight: 700;
-  color: #0f172a; /* Darker headings */
+  color: #fd7106; /* Darker headings */
 }
 
 #app-root {
@@ -153,7 +153,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -181,7 +181,7 @@ h1, h2, h3, h4, h5, h6 {
 ================================= */
 footer {
   background-color: #f0f0f0;
-  color: #4b5563;
+  color: #0dad28;
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;

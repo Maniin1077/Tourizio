@@ -3,7 +3,7 @@
 ========================================= */
 $primary-color: #0f766e; /* Teal / Ocean Blue */
 $secondary-color: #f97316; /* Coral / Sunset Orange */
-$bg-color: #fdf7f0; /* Soft Beige / Light Gray */
+$bg-color: #ffffff; /* Soft Beige / Light Gray */
 $input-bg: #f3f4f6;
 $font-heading: "Times New Roman", serif;
 $font-body: "Open Sans", sans-serif;
@@ -47,12 +47,25 @@ $font-body: "Open Sans", sans-serif;
       color: $primary-color;
     }
 
-    input {
-      font-family: $font-body;
-      padding: 0.6rem 0.75rem 0.6rem 2.5rem;
+    /* ==========================
+       Input Fields
+    ========================== */
+    .relative {
+      position: relative;
+      display: flex;
+      align-items: center; /* ✅ vertical centering */
+    }
+
+    .relative input {
+      flex: 1;
+      padding: 0.6rem 0.75rem 0.6rem 2.8rem; /* ✅ added spacing between icon & text */
       border-radius: 0.5rem;
-      border: 1px solid #d1d5db;
+      border: 1px solid #125bc8;
       background-color: $input-bg;
+      font-family: $font-body;
+      font-size: 1rem;
+      height: 44px;
+      line-height: 1.5rem;
       width: 100%;
       transition: all 0.3s ease;
 
@@ -60,27 +73,40 @@ $font-body: "Open Sans", sans-serif;
         outline: none;
         border-color: $primary-color;
         box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2);
-        background-color: #fff;
+        background-color: #ffffff;
       }
     }
 
-    .relative {
-      position: relative;
-
-      i {
-        position: absolute;
-        top: 50%;
-        left: 0.75rem;
-        transform: translateY(-50%);
-        color: #9ca3af; /* Gray-400 */
-      }
+    /* ✅ Fix for "No. of people" input merging issue */
+    .relative input[type="number"] {
+      padding-left: 3.4rem; /* extra spacing for icon + placeholder */
+      -moz-appearance: textfield; /* remove spinners in Firefox */
     }
 
+    /* ✅ Remove spinners in Chrome, Safari, Edge, Opera */
+    .relative input[type="number"]::-webkit-outer-spin-button,
+    .relative input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .relative i {
+      position: absolute;
+      left: 0.8rem;
+      color: #0f56d0;
+      font-size: 1.2rem;    /* ✅ proportional to input text */
+      pointer-events: none; /* doesn’t block typing */
+      line-height: 1;       /* avoids stretching */
+    }
+
+    /* ==========================
+       Button Styles
+    ========================== */
     button {
       font-family: $font-heading;
       font-weight: 600;
       background: linear-gradient(90deg, $primary-color, $secondary-color);
-      color: #fff;
+      color: #ffffff;
       padding: 0.75rem 1.5rem;
       border-radius: 0.5rem;
       border: none;

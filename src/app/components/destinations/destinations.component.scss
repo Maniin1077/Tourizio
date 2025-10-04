@@ -137,6 +137,11 @@
   animation: fadeInText 1s forwards;
 }
 
+/* Hero main heading color */
+.hero-parallax h1 {
+  color: #ffcc00; // your desired color
+}
+
 @keyframes fadeInText {
   to {
     opacity: 1;

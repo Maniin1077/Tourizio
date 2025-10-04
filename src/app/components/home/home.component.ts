@@ -1,6 +1,3 @@
-// Removed duplicate Component import and redundant @Component decorator
-
-
 import {
   AfterViewInit,
   Component,
@@ -30,6 +27,12 @@ interface Testimonial {
   avatar: string;
   rating: string;
   comment: string;
+}
+
+interface Vehicle {
+  name: string;
+  image: string;
+  description: string;
 }
 
 @Component({
@@ -69,6 +72,51 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   // ===== FEATURED DESTINATIONS =====
   featuredDestinations = []; 
 
+selectedCategory: any = null;
+
+vehicleCategories = [
+  {
+    type: 'Cars / SUVs',
+    image: 'assets/images/car.jpeg',
+    details: [
+      { seater: '4 seater', model: 'Maruti Alto K10' },
+      { seater: '6 seater', model: 'Tata Nexon' },
+      { seater: '7 seater', model: 'Toyota Innova Hycross' },
+      { seater: '8 seater', model: 'Toyota Innova Crysta' },
+      { seater: '9 seater', model: 'Mahindra Bolero Neo Plus' },
+    ]
+  },
+  {
+    type: 'Tempo Vans / Travellers',
+    image: 'assets/images/tempo.jpeg',
+    details: [
+      { seater: '9 seater', model: 'Force Traveller Mini' },
+      { seater: '12 seater', model: 'Tata Winger 12 Seater' },
+      { seater: '15 seater', model: 'Force Traveller 15 Seater' },
+      { seater: '17 seater', model: 'Force Traveller 17 Seater' },
+      { seater: '20 seater', model: 'Force Traveller 20 Seater' },
+    ]
+  },
+  {
+    type: 'Bikes',
+    image: 'assets/images/bike.jpeg',
+    details: [
+      { seater: '2 seater', model: 'Royal Enfield Classic 350' },
+      { seater: '2 seater', model: 'Honda CB350 H’ness' },
+      { seater: '2 seater', model: 'Bajaj Avenger 220' },
+    ]
+  }
+];
+
+openVehicleDetails(category: any) {
+  this.selectedCategory = category;
+}
+
+closePopup() {
+  this.selectedCategory = null;
+}
+
+
   // ===== TESTIMONIALS =====
   testimonials: Testimonial[] = [
     {
@@ -99,8 +147,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private scrollListener: () => void = () => {};
   private resizeListener: () => void = () => {};
   private animationFrame: number | null = null;
-  private ticking = false;
-selectedPlace: any;
+private ticking = false;
+selectedPlace: Vehicle | null = null;
 
   constructor(
     private router: Router,

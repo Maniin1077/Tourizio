@@ -1192,32 +1192,35 @@
         ]
     },
     "trending": [
-        {
-            "id": 76,
-            "name": "Taj Mahal",
-            "location": "Uttar Pradesh, India",
-            "price": 30000,
-            "lat": 27.175000,
-            "lng": 78.042222,
-            "type": "Cultural"
-        },
-        {
-            "id": 30,
-            "name": "Parasnath Hill",
-            "location": "Jharkhand, India",
-            "price": 13000,
-            "lat": 23.950000,
-            "lng": 86.150000,
-            "type": "Adventure"
-        },
-        {
-            "id": 97,
-            "name": "Dal Lake",
-            "location": "Jammu & Kashmir",
-            "price": 22000,
-            "lat": 34.083700,
-            "lng": 74.797300,
-            "type": "Adventure"
-        }
-    ]
+    {
+        "id": 25,
+        "name": "Manali",
+        "location": "Himachal Pradesh, India",
+        "price": 20000,
+        "days": 3,
+        "lat": 32.243200,
+        "lng": 77.189200,
+        "type": "Adventure"
+    },
+    {
+        "id": 84,
+        "name": "Darjeeling",
+        "location": "West Bengal, India",
+        "price": 18000,
+        "days": 2,
+        "lat": 27.041000,
+        "lng": 88.263000,
+        "type": "Nature"
+    },
+    {
+        "id": 101,
+        "name": "Leh Palace",
+        "location": "Ladakh, India",
+        "price": 20000,
+        "days": 1,
+        "lat": 34.165000,
+        "lng": 77.586000,
+        "type": "Cultural"
+    }
+]
 }

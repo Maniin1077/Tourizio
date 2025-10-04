@@ -9,7 +9,6 @@
 </header>
 
 <!-- ================= CAROUSEL ================= -->
-<!-- ================= CAROUSEL ================= -->
 <section class="py-12 bg-gray-50">
   <swiper-container
     slides-per-view="1"
@@ -46,7 +45,7 @@
 <!-- ================= FEATURED DESTINATIONS ================= -->
 <section class="max-w-6xl mx-auto py-16 px-6">
   <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 text-gray-800 font-['Times_New_Roman']">
-    ✨ Featured Destinations
+    Featured Destinations
   </h2>
 
   <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-200">
@@ -61,13 +60,7 @@
         <!-- Overlay -->
         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 translate-y-full group-hover:translate-y-0 transition-all duration-700 ease-in-out flex flex-col items-center space-y-4">
           <h3 class="text-xl font-bold text-white drop-shadow">{{ place.name }}</h3>
-          <p class="text-gray-200 text-sm text-center">{{ place.description }}</p>
-          
-          <!-- View Details button triggers modal -->
-          <button (click)="openDetails(place)"
-            class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-700 transform transition duration-500 hover:-translate-y-1">
-            View Details
-          </button>
+          <p class="text-gray-200 text-sm text-center">{{ place.description }}</p>   
         </div>
       </div>
     </div>
@@ -110,26 +103,48 @@
   </div>
 </div>
 
-<!-- ================= SERVICES ================= -->
-<section class="bg-gradient-to-r from-gray-50 via-white to-gray-100 py-16">
-  <div class="max-w-6xl mx-auto text-center">
-    <h2 class="text-3xl font-bold mb-10 text-gray-900">🛎️ Our Services</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-      <div class="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transform transition duration-700 hover:-translate-y-2 scroll-reveal">
-        <i class="fas fa-map text-white bg-gradient-to-r from-blue-400 to-purple-500 p-4 rounded-full text-5xl mb-4"></i>
-        <h3 class="text-xl font-semibold mb-2">Guided Tours</h3>
-        <p class="text-gray-600 text-sm">Enjoy professional guided tours at top destinations.</p>
+<!-- ================= VEHICLE CATEGORIES / RIDES AVAILABLE ================= -->
+<section class="max-w-6xl mx-auto py-16 px-6">
+  <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 text-gray-800 font-['Times_New_Roman']">
+    Rides Available
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+    <div *ngFor="let category of vehicleCategories"
+         class="relative group rounded-xl overflow-hidden shadow-xl transform transition duration-700 ease-in-out hover:scale-105 hover:shadow-2xl bg-white">
+
+      <!-- Vehicle Image -->
+      <img [src]="category.image" [alt]="category.type" loading="lazy"
+           class="w-full h-56 object-cover transition-all duration-700 ease-in-out group-hover:brightness-90"/>
+
+      <!-- Overlay -->
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 translate-y-full group-hover:translate-y-0 transition-all duration-700 ease-in-out flex flex-col items-center space-y-3">
+        <h3 class="text-xl font-bold text-white drop-shadow">{{ category.type }}</h3>
+
+        <button (click)="openVehicleDetails(category)"
+          class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-700 transform transition duration-500 hover:-translate-y-1">
+          View Details
+        </button>
       </div>
-      <div class="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transform transition duration-700 hover:-translate-y-2 scroll-reveal">
-        <i class="fas fa-hotel text-white bg-gradient-to-r from-green-400 to-teal-500 p-4 rounded-full text-5xl mb-4"></i>
-        <h3 class="text-xl font-semibold mb-2">Hotel Booking</h3>
-        <p class="text-gray-600 text-sm">Book the best hotels with ease and confidence.</p>
-      </div>
-      <div class="p-8 bg-white rounded-xl shadow-md hover:shadow-xl transform transition duration-700 hover:-translate-y-2 scroll-reveal">
-        <i class="fas fa-mountain text-white bg-gradient-to-r from-purple-400 to-pink-500 p-4 rounded-full text-5xl mb-4"></i>
-        <h3 class="text-xl font-semibold mb-2">Adventure Trips</h3>
-        <p class="text-gray-600 text-sm">Experience exciting adventures tailored for you.</p>
-      </div>
+    </div>
+  </div>
+
+  <!-- ===== POPUP / MODAL ===== -->
+  <div *ngIf="selectedCategory" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 relative animate-fadeIn">
+      <h3 class="text-2xl font-bold mb-4 text-center text-gray-800">{{ selectedCategory.type }}</h3>
+
+      <ul class="space-y-2 mb-6">
+        <li *ngFor="let item of selectedCategory.details" class="text-gray-700 flex justify-between border-b border-gray-200 py-2">
+          <span class="font-semibold">{{ item.seater }}</span>
+          <span>{{ item.model }}</span>
+        </li>
+      </ul>
+
+      <button (click)="closePopup()"
+        class="block mx-auto bg-gradient-to-r from-red-500 to-pink-600 text-white px-6 py-2 rounded-lg shadow-md hover:from-red-600 hover:to-pink-700 transition duration-300">
+        Close
+      </button>
     </div>
   </div>
 </section>
@@ -137,7 +152,7 @@
 <!-- ================= TOURISM STATS ================= -->
 <section class="max-w-6xl mx-auto mt-8 py-16 px-6">
   <div class="text-center mb-12">
-    <h2 class="text-3xl font-bold text-gray-900">🌍 Our Tourism Impact</h2>
+    <h2 class="text-3xl font-bold text-gray-900">Our Tourism Impact</h2>
   </div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
     <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transform transition duration-500 hover:scale-105 text-center">
@@ -166,7 +181,7 @@
 <!-- ================= TESTIMONIALS ================= -->
 <section class="bg-gradient-to-r from-purple-50 to-blue-50 py-16">
   <div class="max-w-6xl mx-auto">
-    <h2 class="text-3xl font-bold text-center mb-10">💬 What Our Travelers Say</h2>
+    <h2 class="text-3xl font-bold text-center mb-10">What Our Travelers Say</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
       <div *ngFor="let testimonial of testimonials" class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl hover:scale-105 transition duration-500 text-center">
         <img [src]="testimonial.avatar" [alt]="testimonial.name" class="w-20 h-20 rounded-full mx-auto mb-4"/>
@@ -184,7 +199,7 @@
     <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-10 text-center md:text-left shadow-lg">
       <div class="flex flex-col md:flex-row items-center gap-10">
         <div class="flex-1">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">📖 Discover Amazing Travel Stories & Tips</h2>
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">Discover Amazing Travel Stories & Tips</h2>
           <p class="text-gray-600 mb-6">Get inspired by real travel experiences, hidden gems, and expert tips from travelers.</p>
           <button (click)="goToBlog()"
                   class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full shadow-lg hover:scale-105 transition transform duration-500">
