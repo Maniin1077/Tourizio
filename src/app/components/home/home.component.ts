@@ -91,10 +91,10 @@ vehicleCategories = [
     image: 'assets/images/tempo.jpeg',
     details: [
       { seater: '9 seater', model: 'Force Traveller Mini' },
-      { seater: '12 seater', model: 'Tata Winger 12 Seater' },
-      { seater: '15 seater', model: 'Force Traveller 15 Seater' },
-      { seater: '17 seater', model: 'Force Traveller 17 Seater' },
-      { seater: '20 seater', model: 'Force Traveller 20 Seater' },
+      { seater: '12 seater', model: 'Tata Winger' },
+      { seater: '15 seater', model: 'Force Traveller' },
+      { seater: '17 seater', model: 'Force Traveller' },
+      { seater: '20 seater', model: 'Force Traveller' },
     ]
   },
   {

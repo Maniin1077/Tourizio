@@ -13,7 +13,7 @@ export interface Place {
   image?: string | null;
   lat?: number;
   lng?: number;
-  type?: 'Adventure' | 'Cultural' | 'Food' | 'Nature';
+  type?: 'Adventure' | 'Cultural' | 'Nature';
 }
 
 @Component({
@@ -21,19 +21,30 @@ export interface Place {
   templateUrl: './destinations.component.html',
   styleUrls: ['./destinations.component.scss'],
 })
-export class DestinationsComponent
-  implements OnInit, AfterViewChecked, OnDestroy
-{
+export class DestinationsComponent implements OnInit, AfterViewChecked, OnDestroy {
+onImageError($event: any) {
+throw new Error('Method not implemented.');
+}
   // DATA
   destinations: string[] = [];
   placesMap: Record<string, Place[]> = {};
   selectedDestination: string | null = null;
 
   // UI lists
-  popularPlaces: Place[] = []; // always 6 random cards
-  filteredPlaces: Place[] = []; // destination-specific cards
+  popularPlaces: Place[] = [];
+  filteredPlaces: Place[] = [];
   trendingPlaces: Place[] = [];
   favoritePlaces: Place[] = [];
+  searchedPlaces: Place[] = [];
+
+  // Filters
+  searchQuery: string = '';
+  locationFilter: string = '';
+  typeFilter: string = '';
+  popularityFilter: 'high' | 'medium' | 'low' | '' = '';
+  priceFilter: 'high' | 'medium' | 'low' | '' = '';
+  allLocations: string[] = [];
+  allTypes: string[] = [];
 
   email: string = '';
   subscribed: boolean = false;
@@ -48,39 +59,31 @@ export class DestinationsComponent
   newsletterSuccess = false;
   newsletterError = false;
 
-  // Scroll Reveal
   private scrollRevealElements: NodeListOf<Element> | null = null;
   private scrollListener: (() => void) | null = null;
   private resizeListener: (() => void) | null = null;
   private ticking = false;
   private animationFrame: number | null = null;
+p: any;
+sp: any;
 
-  constructor(
-    private router: Router,
-    private sessionService: UserSessionService,
-  ) {}
+  constructor(private router: Router, private sessionService: UserSessionService) {}
 
   async ngOnInit(): Promise<void> {
     this.setCustomMarker();
     await this.loadDestinations();
     this.initScrollReveal();
     this.loadFavorites();
-
-    // Pick 6 random places once on init
     this.showRandomPlaces();
   }
 
   // ===== SCROLL REVEAL =====
   private initScrollReveal(): void {
-    this.scrollRevealElements = document.querySelectorAll(
-      '.scroll-reveal, .title-reveal',
-    );
+    this.scrollRevealElements = document.querySelectorAll('.scroll-reveal, .title-reveal');
     this.scrollListener = () => this.optimizedScrollReveal();
     this.resizeListener = () => this.optimizedScrollReveal();
-
     window.addEventListener('scroll', this.scrollListener, { passive: true });
     window.addEventListener('resize', this.resizeListener, { passive: true });
-
     this.revealOnScroll();
   }
 
@@ -101,8 +104,7 @@ export class DestinationsComponent
 
     this.scrollRevealElements.forEach((element: Element, index: number) => {
       const htmlElement = element as HTMLElement;
-      const elementTop =
-        htmlElement.getBoundingClientRect().top + window.pageYOffset;
+      const elementTop = htmlElement.getBoundingClientRect().top + window.pageYOffset;
       const revealPoint = 100;
       if (scrollTop + windowHeight - revealPoint > elementTop) {
         if (!htmlElement.classList.contains('show')) {
@@ -119,6 +121,12 @@ export class DestinationsComponent
       const data = await res.json();
       this.destinations = data.destinations || [];
       this.placesMap = data.placesMap || {};
+
+      // ✅ Collect unique locations & types for filters
+      const allPlaces = Object.values(this.placesMap).flat();
+      this.allLocations = Array.from(new Set(allPlaces.map((p) => p.location))).sort();
+      this.allTypes = Array.from(new Set(allPlaces.map((p) => p.type))).sort();
+
       this.trendingPlaces = data.trending || [];
       await this.loadTrendingImages();
     } catch (err) {
@@ -135,188 +143,26 @@ export class DestinationsComponent
     await Promise.allSettled(promises);
   }
 
-  // private async fetchImage(query: string): Promise<string> {
-  //   try {
-  //     const res = await fetch(
-  //       `https://api.pexels.com/v1/search?query=${encodeURIComponent(
-  //         query,
-  //       )}&per_page=1&orientation=landscape`,
-  //       { headers: { Authorization: this.PEXELS_API_KEY } },
-  //     );
-  //     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-  //     const data = await res.json();
-  //     if (data.photos?.length > 0) return data.photos[0].src.medium;
-  //   } catch (err) {
-  //     console.error('Error fetching image for:', query, err);
-  //   }
-  //   return `https://via.placeholder.com/400x250/4285f4/ffffff?text=${encodeURIComponent(
-  //     query.split(' ')[0],
-  //   )}`;
-  // }
-
-  // ===== RANDOM PLACES =====
-
-  // Replace your existing fetchImage method with this improved version:
-
+  // ===== IMAGE FETCH =====
   private async fetchImage(query: string): Promise<string> {
     try {
-      // Enhanced query with destination-focused keywords
-      const enhancedQuery = `${query} travel destination landmark`;
-
       const res = await fetch(
-        `https://api.pexels.com/v1/search?query=${encodeURIComponent(
-          enhancedQuery,
-        )}&per_page=15&orientation=landscape`,
+        `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape`,
         { headers: { Authorization: this.PEXELS_API_KEY } },
       );
-
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       const data = await res.json();
-
-      if (data.photos?.length > 0) {
-        // Score each photo based on quality indicators
-        const scoredPhotos = data.photos.map((photo: any) => {
-          const alt = (photo.alt || '').toLowerCase();
-          let score = 0;
-
-          // Heavily penalize people/vehicles
-          const strongExclude = [
-            'person',
-            'people',
-            'man',
-            'woman',
-            'men',
-            'women',
-            'car',
-            'vehicle',
-            'portrait',
-            'face',
-            'selfie',
-          ];
-          if (strongExclude.some((term) => alt.includes(term))) {
-            score -= 100;
-          }
-
-          // Lightly penalize indoor/closeup shots
-          const lightExclude = ['indoor', 'restaurant', 'closeup', 'close-up'];
-          if (lightExclude.some((term) => alt.includes(term))) {
-            score -= 30;
-          }
-
-          // Reward destination-related terms
-          const goodTerms = [
-            'landscape',
-            'city',
-            'architecture',
-            'building',
-            'monument',
-            'view',
-            'aerial',
-            'landmark',
-            'temple',
-            'beach',
-            'mountain',
-            'scenic',
-          ];
-          goodTerms.forEach((term) => {
-            if (alt.includes(term)) score += 20;
-          });
-
-          // Reward if query location name is in alt text
-          const locationParts = query.toLowerCase().split(' ');
-          locationParts.forEach((part) => {
-            if (part.length > 3 && alt.includes(part)) score += 30;
-          });
-
-          return { photo, score };
-        });
-
-        // Sort by score and pick the best one
-        scoredPhotos.sort((a, b) => b.score - a.score);
-
-        // Use the highest scoring photo if it's decent (score > -50)
-        if (scoredPhotos[0].score > -50) {
-          return scoredPhotos[0].photo.src.medium;
-        }
-
-        // If all photos have bad scores, try fallback search
-        return this.fetchSpecificDestinationImage(query);
-      }
+      if (data.photos?.length > 0) return data.photos[0].src.medium;
     } catch (err) {
       console.error('Error fetching image for:', query, err);
     }
-
-    return `https://via.placeholder.com/400x250/4285f4/ffffff?text=${encodeURIComponent(
-      query.split(' ')[0],
-    )}`;
-  }
-
-  // Add this new method to your component:
-  private async fetchSpecificDestinationImage(query: string): Promise<string> {
-    try {
-      // Extract just the place name (before any comma or 'in')
-      const placeName = query.split(',')[0].split(' in ')[0].trim();
-
-      // Try searching with just the place name + basic keywords
-      const specificQuery = `${placeName} tourist destination`;
-
-      const res = await fetch(
-        `https://api.pexels.com/v1/search?query=${encodeURIComponent(
-          specificQuery,
-        )}&per_page=8&orientation=landscape`,
-        { headers: { Authorization: this.PEXELS_API_KEY } },
-      );
-
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      const data = await res.json();
-
-      if (data.photos?.length > 0) {
-        // Pick a random photo from the results to add variety
-        const randomIndex = Math.floor(
-          Math.random() * Math.min(3, data.photos.length),
-        );
-        return data.photos[randomIndex].src.medium;
-      }
-    } catch (err) {
-      console.error('Fallback image search failed:', err);
-    }
-
-    // Last resort: use the original query without enhancements
-    return this.fetchBasicImage(query);
-  }
-
-  // Add this final fallback method:
-  private async fetchBasicImage(query: string): Promise<string> {
-    try {
-      const res = await fetch(
-        `https://api.pexels.com/v1/search?query=${encodeURIComponent(
-          query,
-        )}&per_page=5&orientation=landscape`,
-        { headers: { Authorization: this.PEXELS_API_KEY } },
-      );
-
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      const data = await res.json();
-
-      if (data.photos?.length > 0) {
-        // Pick second or third image to avoid most common result
-        const index = Math.min(1, data.photos.length - 1);
-        return data.photos[index].src.medium;
-      }
-    } catch (err) {
-      console.error('Basic image search failed:', err);
-    }
-
-    return `https://via.placeholder.com/400x250/4285f4/ffffff?text=${encodeURIComponent(
-      query.split(' ')[0],
-    )}`;
+    return `https://via.placeholder.com/400x250/4285f4/ffffff?text=${encodeURIComponent(query.split(' ')[0])}`;
   }
 
   private showRandomPlaces(): void {
     const allPlaces: Place[] = Object.values(this.placesMap).flat();
     if (!allPlaces || allPlaces.length === 0) return;
     this.popularPlaces = this.shuffleArray(allPlaces).slice(0, 6);
-
     this.popularPlaces.forEach(async (place, idx) => {
       place.image = undefined;
       const img = await this.fetchImage(`${place.name} ${place.location}`);
@@ -333,7 +179,69 @@ export class DestinationsComponent
     return a;
   }
 
-  // ===== MAPS (only for filteredPlaces) =====
+  // ===== FILTERS =====
+  applyFilters(): void {
+    let allPlaces: Place[] = Object.values(this.placesMap).flat();
+
+    // ✅ Search filter (by name, location, type)
+    if (this.searchQuery.trim()) {
+      const q = this.searchQuery.toLowerCase();
+      allPlaces = allPlaces.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.location.toLowerCase().includes(q) ||
+          (p.type && p.type.toLowerCase().includes(q))
+      );
+    }
+
+    // ✅ Location filter
+    if (this.locationFilter) {
+      allPlaces = allPlaces.filter((p) => p.location === this.locationFilter);
+    }
+
+    // ✅ Type filter
+    if (this.typeFilter) {
+      allPlaces = allPlaces.filter((p) => p.type === this.typeFilter);
+    }
+
+    // ✅ Popularity filter (example: based on price)
+    if (this.popularityFilter) {
+      allPlaces = allPlaces.filter((p) => {
+        if (this.popularityFilter === 'high') return p.price >= 18000;
+        if (this.popularityFilter === 'medium') return p.price >= 13000 && p.price < 18000;
+        if (this.popularityFilter === 'low') return p.price < 13000;
+        return true;
+      });
+    }
+
+    // ✅ Price sort
+    if (this.priceFilter) {
+      allPlaces = allPlaces.sort((a, b) => {
+        if (this.priceFilter === 'high') return b.price - a.price;
+        if (this.priceFilter === 'low') return a.price - b.price;
+        return 0;
+      });
+    }
+
+    this.searchedPlaces = allPlaces;
+
+    // ✅ Lazy-load images for results
+    this.searchedPlaces.forEach(async (p, idx) => {
+      if (!p.image) {
+        const img = await this.fetchImage(`${p.name} ${p.location}`);
+        setTimeout(() => (p.image = img), 80 * idx);
+      }
+    });
+
+    // ✅ Update maps for filtered results
+    setTimeout(() => {
+      this.cleanupMaps();
+      this.filteredPlaces = [...this.searchedPlaces];
+      this.initializeMaps();
+    }, 200);
+  }
+
+  // ===== MAPS =====
   private setCustomMarker(): void {
     const customIcon = L.divIcon({
       className: 'custom-marker',
@@ -390,58 +298,6 @@ export class DestinationsComponent
     this.mapsInitialized = {};
   }
 
-  // ===== UI ACTIONS =====
-  async onSelectDestination(destination: string): Promise<void> {
-    this.selectedDestination = destination || null;
-
-    if (!this.selectedDestination) {
-      this.filteredPlaces = [];
-      this.cleanupMaps();
-      return;
-    }
-
-    const places = [...(this.placesMap[this.selectedDestination] || [])];
-    this.filteredPlaces = this.shuffleArray(places);
-    this.cleanupMaps();
-
-    const imagePromises = this.filteredPlaces.map(async (place, idx) => {
-      place.image = undefined;
-      const img = await this.fetchImage(`${place.name} ${place.location}`);
-      setTimeout(() => (place.image = img), 80 * idx);
-    });
-    await Promise.allSettled(imagePromises);
-
-    this.mapsInitialized = {};
-  }
-
-  filterByType(type: string): void {
-    if (!this.selectedDestination) return;
-    this.filteredPlaces = type
-      ? this.placesMap[this.selectedDestination].filter((p) => p.type === type)
-      : [...this.placesMap[this.selectedDestination]];
-    this.cleanupMaps();
-  }
-
-  onBookNow(placeId: number) {
-    this.sessionService.user$
-      .subscribe((user) => {
-        if (user) {
-          this.router.navigate(['/booking'], { queryParams: { placeId } });
-        } else {
-          alert('You need to login first to book.');
-          this.router.navigate(['/login']);
-        }
-      })
-      .unsubscribe();
-  }
-
-  subscribe(): void {
-    if (!this.email.trim()) return;
-    this.subscribed = true;
-    this.email = '';
-    setTimeout(() => (this.subscribed = false), 3000);
-  }
-
   // ===== FAVORITES =====
   toggleFavorite(place: Place) {
     const exists = this.favoritePlaces.some((p) => p.id === place.id);
@@ -457,10 +313,7 @@ export class DestinationsComponent
 
   private saveFavorites() {
     try {
-      localStorage.setItem(
-        'favoritePlaces',
-        JSON.stringify(this.favoritePlaces),
-      );
+      localStorage.setItem('favoritePlaces', JSON.stringify(this.favoritePlaces));
     } catch (err) {
       console.error('Error saving favorites:', err);
     }
@@ -475,100 +328,23 @@ export class DestinationsComponent
     }
   }
 
-  // ===== LIFECYCLE =====
-  ngAfterViewChecked(): void {
-    if (this.filteredPlaces.length) this.initializeMaps();
-    this.optimizedScrollReveal();
+  // ===== BOOKING =====
+  onBookNow(placeId: number) {
+    this.sessionService.user$
+      .subscribe((user) => {
+        if (user) {
+          this.router.navigate(['/booking'], { queryParams: { placeId } });
+        } else {
+          alert('You need to login first to book.');
+          this.router.navigate(['/login']);
+        }
+      })
+      .unsubscribe();
   }
 
-  ngOnDestroy(): void {
-    this.cleanupMaps();
-    if (this.scrollListener)
-      window.removeEventListener('scroll', this.scrollListener);
-    if (this.resizeListener)
-      window.removeEventListener('resize', this.resizeListener);
-    if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
-  }
-
-  searchQuery: string = '';
-  searchedPlaces: Place[] = [];
-
-  onSearch(): void {
-    const query = this.searchQuery.trim().toLowerCase();
-
-    if (!query) {
-      this.searchedPlaces = []; // show back random 6
-      this.selectedDestination = ''; // reset dropdown selection
-      this.filteredPlaces = []; // clear filtered list
-      return;
-    }
-
-    const allPlaces: Place[] = Object.values(this.placesMap).flat();
-    this.searchedPlaces = allPlaces.filter((p) =>
-      p.name.toLowerCase().startsWith(query),
-    );
-
-    // Fetch images dynamically for each result
-    this.searchedPlaces.forEach((place, idx) => {
-      this.fetchImage(`${place.name} ${place.location}`).then((img) => {
-        place.image = img;
-      });
-    });
-
-    // Initialize maps for searched places after render
-    setTimeout(() => {
-      this.cleanupMaps();
-      this.filteredPlaces = [...this.searchedPlaces]; // so map init still works
-      this.initializeMaps();
-    }, 200);
-  }
-
-  popularityFilter: 'high' | 'medium' | 'low' | '' = '';
-  priceFilter: 'high' | 'medium' | 'low' | '' = '';
-
-  onFilterChange(): void {
-    let allPlaces: Place[] = Object.values(this.placesMap).flat();
-
-    // Start with search query if present
-    if (this.searchQuery.trim()) {
-      const query = this.searchQuery.trim().toLowerCase();
-      allPlaces = allPlaces.filter((p) =>
-        p.name.toLowerCase().startsWith(query),
-      );
-    }
-
-    // Apply popularity filter
-    if (this.popularityFilter) {
-      allPlaces = allPlaces.filter((p) => {
-        if (this.popularityFilter === 'high') return p.price >= 18000; // example
-        if (this.popularityFilter === 'medium')
-          return p.price >= 13000 && p.price < 18000;
-        if (this.popularityFilter === 'low') return p.price < 13000;
-        return true;
-      });
-    }
-
-    // Apply price filter
-    if (this.priceFilter) {
-      allPlaces = allPlaces.sort((a, b) => {
-        if (this.priceFilter === 'high') return b.price - a.price;
-        if (this.priceFilter === 'medium') return a.price - b.price; // optional: adjust logic
-        if (this.priceFilter === 'low') return a.price - b.price;
-        return 0;
-      });
-    }
-
-    this.searchedPlaces = allPlaces;
-    setTimeout(() => {
-      this.cleanupMaps();
-      this.filteredPlaces = [...this.searchedPlaces];
-      this.initializeMaps();
-    }, 200);
-  }
   // ===== NEWSLETTER =====
   submitNewsletter() {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (this.newsletterEmail.match(emailPattern)) {
       this.newsletterSuccess = true;
       this.newsletterError = false;
@@ -581,4 +357,16 @@ export class DestinationsComponent
     }
   }
 
+  // ===== LIFECYCLE =====
+  ngAfterViewChecked(): void {
+    if (this.filteredPlaces.length) this.initializeMaps();
+    this.optimizedScrollReveal();
+  }
+
+  ngOnDestroy(): void {
+    this.cleanupMaps();
+    if (this.scrollListener) window.removeEventListener('scroll', this.scrollListener);
+    if (this.resizeListener) window.removeEventListener('resize', this.resizeListener);
+    if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+  }
 }

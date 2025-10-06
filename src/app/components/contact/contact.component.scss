@@ -55,10 +55,10 @@ $font-body: "Open Sans", sans-serif;
 
     i {
       position: absolute;
-      left: 0.95rem;
-      top: 1.05rem; /* Adjusted for perfect vertical centering */
+      left: 1.05rem;
+      top: 1.5rem; /* Adjusted for perfect vertical centering */
       color: #0f56d0;
-      font-size: 1.05rem;
+      font-size: 1.25rem;
       pointer-events: none;
       transition: color 0.3s ease;
     }

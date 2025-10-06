@@ -1,127 +1,186 @@
-<div class="booking-card">
-  <h2>Book Your Trip</h2>
-  <p>Visit destinations page to book your dream destination.</p>
+<div
+  class="booking-card p-6 md:p-8 max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl transition-all duration-300 hover:shadow-3xl"
+>
+  <h2 class="text-3xl font-bold mb-6 text-center text-teal-700 tracking-wide">
+    Book Your Trip
+  </h2>
 
-  <form (ngSubmit)="confirmBooking()" class="space-y-4">
+  <form (ngSubmit)="confirmBooking()" class="space-y-5">
     <!-- Name -->
     <div>
-      <label class="block font-medium mb-1">Full Name <span class="text-red-500">*</span></label>
-      <div class="relative">
-        <i class="fas fa-user"></i>
-        <input
-          type="text"
-          [(ngModel)]="booking.name"
-          name="name"
-          placeholder="Enter your full name"
-          required
-        />
-      </div>
+      <label class="block font-medium mb-1 text-gray-700">
+        Full Name <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="text"
+        [(ngModel)]="booking.name"
+        name="name"
+        required
+        placeholder="Enter your full name"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:border-teal-500 focus:ring-1 focus:ring-teal-400 transition"
+        (input)="onInputChange()"
+      />
     </div>
 
-    <!-- Destination -->
-    <div class="destination-dropdown">
-      <label class="block font-medium mb-1">Destination <span class="text-red-500">*</span></label>
-      <div class="relative">
-        <i class="fas fa-map-marker-alt"></i>
-        <input
-          type="text"
-          [(ngModel)]="booking.destination"
-          name="destination"
-          placeholder="Type to search destination"
-          (input)="filterDestinations()"
-          (focus)="showDropdown = true"
-          (blur)="hideDropdownDelayed()"
-          required
-        />
+<!-- Destination -->
+<div class="relative">
+  <label class="block font-medium mb-1 text-gray-700">
+    Destination <span class="text-red-500">*</span>
+  </label>
 
-        <!-- Dropdown -->
-        <ul class="dropdown-list" *ngIf="showDropdown && filteredDestinations.length > 0">
-          <li *ngFor="let place of filteredDestinations" (mousedown)="selectDestination(place)">
-            {{ place.name }} — ₹{{ place.price }}
-          </li>
-        </ul>
-      </div>
-    </div>
+  <input
+    type="text"
+    [(ngModel)]="booking.destination"
+    name="destination"
+    (input)="onInputChange()"
+    (focus)="showDropdown = true"
+    (blur)="hideDropdownDelayed()"
+    placeholder="Search destination"
+    required
+    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-teal-500 focus:ring-1 focus:ring-teal-400 transition bg-white"
+  />
 
-    <!-- Date -->
+  <!-- Dropdown -->
+  <div
+    *ngIf="showDropdown && filteredDestinations.length > 0"
+    class="absolute left-0 right-0 bottom-full mb-2 bg-white border border-gray-200 rounded-lg shadow-lg z-40 max-h-56 overflow-y-auto"
+  >
+    <ul class="divide-y divide-gray-100">
+      <li
+        *ngFor="let place of filteredDestinations"
+        (mousedown)="selectDestination(place)"
+        class="px-4 py-2 hover:bg-teal-50 cursor-pointer transition"
+      >
+        <span class="block font-semibold text-gray-800">{{ place.name }}</span>
+        <span class="block text-xs text-gray-500">
+          {{ place.days }} Days — ₹{{ place.price | number:'1.0-0' }}
+          (₹{{ (place.price / place.days) | number:'1.0-0' }}/day)
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+    <!-- Travel Date -->
     <div>
-      <label class="block font-medium mb-1">Travel Date <span class="text-red-500">*</span></label>
-      <div class="relative">
-        <i class="fas fa-calendar-alt"></i>
-        <input
-          type="date"
-          [(ngModel)]="booking.date"
-          name="date"
-          required
-        />
-      </div>
+      <label class="block font-medium mb-1 text-gray-700">
+        Travel Date <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="date"
+        [(ngModel)]="booking.date"
+        name="date"
+        required
+        (change)="updateTotalPrice()"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:border-teal-500 focus:ring-1 focus:ring-teal-400 transition"
+      />
     </div>
 
-    <!-- People -->
+    <!-- Number of Travelers -->
     <div>
-      <label class="block font-medium mb-1">Number of Travelers <span class="text-red-500">*</span></label>
-      <div class="relative">
-        <i class="fas fa-users"></i>
-        <input
-          type="number"
-          [(ngModel)]="booking.people"
-          name="people"
-          min="1"
-          placeholder="No. of people"
-          (input)="updateTotalPrice()"
-          required
-        />
+      <label class="block font-medium mb-1 text-gray-700">
+        Number of Travelers <span class="text-red-500">*</span>
+      </label>
+      <input
+        type="number"
+        [(ngModel)]="booking.people"
+        name="people"
+        min="1"
+        placeholder="Enter number of travelers"
+        (input)="updateTotalPrice()"
+        required
+        class="w-full p-3 border border-gray-300 rounded-lg focus:border-teal-500 focus:ring-1 focus:ring-teal-400 transition"
+      />
+    </div>
+
+    <!-- Number of Days -->
+    <div>
+      <label class="block font-medium mb-1 text-gray-700">Number of Days<span class="text-red-500">*</span></label>
+      <input
+        type="number"
+        [(ngModel)]="booking.days"
+        name="days"
+        min="1"
+        (input)="updateTotalPrice()"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:border-teal-500 focus:ring-1 focus:ring-teal-400 transition"
+      />
+    </div>
+
+    <!-- Vehicle Type & Model -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Vehicle Type -->
+      <div>
+        <label class="block font-medium mb-1 text-gray-700">Vehicle Type<span class="text-red-500">*</span></label>
+        <select
+          [(ngModel)]="selectedVehicleType"
+          name="vehicleType"
+          (ngModelChange)="onVehicleTypeChange()"
+          class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-400 transition"
+        >
+          <option *ngFor="let type of vehicleTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+
+      <!-- Vehicle Model -->
+      <div>
+        <label class="block font-medium mb-1 text-gray-700">Vehicle Model<span class="text-red-500">*</span></label>
+        <select
+          [(ngModel)]="selectedVehicleModel"
+          name="vehicleModel"
+          (ngModelChange)="onVehicleModelChange()"
+          class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:border-teal-500 focus:ring-1 focus:ring-teal-400 transition"
+        >
+          <option [ngValue]="null" disabled selected>Select Model</option>
+          <option *ngFor="let v of vehicleModels" [ngValue]="v">
+            {{ v.model }} — {{ v.capacity }} — ₹{{ v.pricePerDay }}/day
+          </option>
+        </select>
       </div>
     </div>
 
-    <!-- Total Price -->
-    <div *ngIf="totalPrice > 0">
-      <label class="block font-medium mb-1">Total Price</label>
-      <div class="relative">
-        <i class="fas fa-wallet"></i>
-        <input
-          type="text"
-          [value]="totalPrice | currency: 'INR'"
-          readonly
-        />
-      </div>
-    </div>
+<!-- Total -->
+<div *ngIf="showTotal" class="pt-2 space-y-2">
+  <label class="block font-medium mb-1 text-gray-700">Total Price</label>
 
-    <!-- Confirm Booking -->
+  <!-- Estimated Total -->
+  <div
+    class="w-full p-3 border rounded-lg bg-gray-50 text-gray-800 font-semibold flex justify-between items-center"
+  >
+    <span>Estimated Total:</span>
+    <span class="text-lg text-teal-700 font-bold">
+      {{ formatCurrency(totalPrice) }}
+    </span>
+  </div>
+
+  <!-- Special Offer Discount -->
+  <div
+    *ngIf="isFirstBooking"
+    class="w-full p-3 border rounded-lg bg-green-50 text-green-700 font-semibold flex justify-between items-center"
+  >
+    <span>Special Offer (15% OFF):</span>
+    <span>-{{ formatCurrency(discountAmount) }}</span>
+  </div>
+
+  <!-- Final Total -->
+  <div
+    class="w-full p-3 border rounded-lg bg-white shadow-sm text-gray-900 font-bold flex justify-between items-center"
+  >
+    <span>Total Payable:</span>
+    <span class="text-xl text-teal-700">
+      {{ formatCurrency(finalAmount) }}
+    </span>
+  </div>
+</div>
+
+
+    <!-- Confirm -->
     <button
       type="submit"
-      [disabled]="
-        !booking.name ||
-        !booking.destination ||
-        !booking.date ||
-        !booking.people ||
-        totalPrice === 0
-      "
+      [disabled]="!showTotal || totalPrice === 0"
+      class="w-full py-3 mt-4 bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold rounded-lg hover:from-teal-700 hover:to-blue-700 transition duration-300 shadow-md hover:shadow-lg"
     >
-      <span *ngIf="!isBooking">Confirm Booking</span>
-      <span *ngIf="isBooking" class="flex items-center justify-center">
-        <svg
-          class="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            class="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            stroke-width="4"
-          ></circle>
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          ></path>
-        </svg>
-        Booking...
-      </span>
+      Confirm Booking
     </button>
   </form>
 </div>
