@@ -55,13 +55,7 @@ const routes: Routes = [
       import('./pages/blog/blog.module').then((m) => m.BlogModule),
     data: { animation: 'BlogPage' },
   },
-  {
-    path: 'payment',
-    loadChildren: () =>
-      import('./pages/payment/payment.module').then((m) => m.PaymentModule),
-    data: { animation: 'PaymentPage' },
-  },
-
+  
   { path: '**', redirectTo: '' },
 ];
 
