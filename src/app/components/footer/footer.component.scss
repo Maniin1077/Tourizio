@@ -5,11 +5,11 @@ $coral-light: #ff8a65;
 $transition: 0.3s ease-in-out;
 
 footer {
-  background: linear-gradient(to bottom, #002b36, $teal-dark);
+  background: linear-gradient(to bottom, #002b36, #004d66);
   color: $teal-light;
   font-family: 'Open Sans', sans-serif;
+  padding: 3rem 1rem;
   position: relative;
-  overflow: hidden;
 
   h2, h3 {
     font-family: 'Times New Roman', serif;
@@ -27,48 +27,63 @@ footer {
 
   .footer-link {
     display: inline-block;
-    position: relative;
     font-weight: 500;
     letter-spacing: 0.2px;
+    position: relative;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
-      left: 0;
       bottom: -2px;
+      left: 0;
       width: 0;
       height: 1px;
       background: $coral;
       transition: width $transition;
     }
+
     &:hover::after {
       width: 100%;
     }
   }
 
   .newsletter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     input {
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.05);
       color: #fff;
       &::placeholder {
         color: rgba(255, 255, 255, 0.6);
       }
       &:focus {
+        outline: none;
         border-color: $coral;
-        box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.3);
+        box-shadow: 0 0 0 3px rgba($coral, 0.3);
       }
     }
 
     button {
       background: linear-gradient(90deg, $coral, $coral-light);
+      color: #fff;
       font-weight: 600;
-      letter-spacing: 0.3px;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1.25rem;
+      cursor: pointer;
+      transition: all $transition;
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        box-shadow: 0 4px 12px rgba($coral, 0.3);
       }
     }
+  }
+
+  .animate-fade {
+    animation: fade 0.5s ease-out;
   }
 
   @keyframes fade {
@@ -80,9 +95,5 @@ footer {
       opacity: 1;
       transform: translateY(0);
     }
-  }
-
-  .animate-fade {
-    animation: fade 0.5s ease-out;
   }
 }

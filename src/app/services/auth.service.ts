@@ -8,24 +8,31 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  getCurrentUser() {
-    throw new Error('Method not implemented.');
-  }
+
+  private readonly USER_KEY = 'currentUser';
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {}
 
   // =============================
   // Signup with Email & Password
   // =============================
-  signUp(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.createUserWithEmailAndPassword(email, password);
+  async signUp(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
+    if (userCredential.user) {
+      this.saveUserToLocalStorage(userCredential.user);
+    }
+    return userCredential;
   }
 
   // =============================
   // Login with Email & Password
   // =============================
-  login(email: string, password: string): Promise<firebase.auth.UserCredential> {
-    return this.afAuth.signInWithEmailAndPassword(email, password);
+  async login(email: string, password: string): Promise<firebase.auth.UserCredential> {
+    const userCredential = await this.afAuth.signInWithEmailAndPassword(email, password);
+    if (userCredential.user) {
+      this.saveUserToLocalStorage(userCredential.user);
+    }
+    return userCredential;
   }
 
   // =============================
@@ -36,7 +43,7 @@ export class AuthService {
     try {
       const userCredential = await this.afAuth.signInWithPopup(provider);
       if (userCredential.user) {
-        // Optional: You can handle additional logic here like saving session
+        this.saveUserToLocalStorage(userCredential.user);
         console.log('Google login successful:', userCredential.user);
       }
       this.router.navigate([redirectUrl]);
@@ -52,6 +59,7 @@ export class AuthService {
   async logout(redirectUrl: string = '/login'): Promise<void> {
     try {
       await this.afAuth.signOut();
+      localStorage.removeItem(this.USER_KEY); // clear stored user
       this.router.navigate([redirectUrl]);
     } catch (err: any) {
       console.error('Logout failed:', err);
@@ -63,6 +71,28 @@ export class AuthService {
   // =============================
   getUser(): Observable<firebase.User | null> {
     return this.afAuth.authState;
+  }
+
+  // =============================
+  // Save user info to localStorage
+  // =============================
+  private saveUserToLocalStorage(user: firebase.User) {
+    const userData = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      emailVerified: user.emailVerified
+    };
+    localStorage.setItem(this.USER_KEY, JSON.stringify(userData));
+  }
+
+  // =============================
+  // Get user from localStorage
+  // =============================
+  getUserFromLocalStorage(): any {
+    const data = localStorage.getItem(this.USER_KEY);
+    return data ? JSON.parse(data) : null;
   }
 
   // =============================

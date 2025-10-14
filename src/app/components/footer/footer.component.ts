@@ -10,19 +10,29 @@ export class FooterComponent {
   newsletterSuccess: boolean = false;
   newsletterError: boolean = false;
 
+  // Handle newsletter subscription
   submitNewsletter() {
     if (!this.newsletterEmail || !this.validateEmail(this.newsletterEmail)) {
       this.newsletterError = true;
       this.newsletterSuccess = false;
-      setTimeout(() => this.newsletterError = false, 4000);
+
+      // Hide error after 4s
+      setTimeout(() => (this.newsletterError = false), 4000);
       return;
     }
+
+    // Simulate successful subscription
     this.newsletterSuccess = true;
     this.newsletterError = false;
+
+    // Clear input
     this.newsletterEmail = '';
-    setTimeout(() => this.newsletterSuccess = false, 4000);
+
+    // Hide success after 4s
+    setTimeout(() => (this.newsletterSuccess = false), 4000);
   }
 
+  // Simple email validation
   validateEmail(email: string): boolean {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email.toLowerCase());
