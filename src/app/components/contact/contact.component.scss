@@ -1,193 +1,180 @@
-/* =========================================
-   CONTACT PAGE - Unified with Booking Style (Updated)
-========================================= */
-
-$primary-color: #0f766e; /* Teal / Ocean Blue */
-$secondary-color: #f97316; /* Coral / Sunset Orange */
-$bg-color: #ffffff;
-$input-bg: #f3f4f6;
-$font-heading: "Times New Roman", serif;
-$font-body: "Open Sans", sans-serif;
+/* ===============================
+   Contact Page Styling
+================================= */
 
 .contact-page {
+  background: transparent;
   min-height: 100vh;
+  padding: 3rem 1.5rem;
+  font-family: "Open Sans", sans-serif;
+}
+
+.container {
+  max-width: 1100px;
+}
+
+/* FORM CARD */
+.form-card {
+  background: rgba(255,255,255,0.98);
+  border-radius: 1rem;
+  padding: 2.2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border: 1px solid rgba(15,23,42,0.05);
+}
+
+/* WORKING HOURS CARD */
+.hours-card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 1rem;
+  padding: 1.6rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  border: 1px solid rgba(15,23,42,0.05);
+  align-self: start;
+}
+
+/* INPUT FIELDS */
+.form-input {
+  width: 100%;
+  display: block;
+  border: 1px solid rgba(15,92,200,0.12);
+  padding: 0.85rem 1rem;
+  border-radius: 0.5rem;
+  background: #fbfbfd;
+  font-size: 0.98rem;
+  transition: all 0.18s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #0f766e;
+  box-shadow: 0 0 6px rgba(15,118,110,0.15);
+  background: #fff;
+}
+
+/* SUBMIT BUTTON */
+.btn-submit {
+  background: linear-gradient(90deg, #0f766e, #f97316);
+  color: #fff;
+  padding: 0.9rem;
+  border-radius: 0.6rem;
+  font-weight: 700;
+  border: none;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15,118,110,0.2);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* SUCCESS MODAL */
+.success-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
   display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+
+.success-card {
+  background: #fff;
+  padding: 1.8rem 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  animation: modalIn .25s ease-out;
+}
+
+/* MODAL ANIMATION */
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* WORKING HOURS LIST */
+.hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.hours-item {
+  padding: 0.6rem 0.8rem;
+  background: #fbfdff;
+  border-radius: 8px;
+  border: 1px solid rgba(15,23,42,0.03);
+}
+
+.hours-item .day {
+  font-weight: 700;
+  color: #0f766e;
+  margin-bottom: 0.25rem;
+}
+
+.hours-item .time {
+  color: #374151;
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+
+.response-time {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+/* FOLLOW US SECTION */
+.follow-us {
+  margin-top: 1.6rem;
+  text-align: center;
+}
+
+.follow-us h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f766e;
+  margin-bottom: 0.7rem;
+}
+
+.social-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.social-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #ffffff, #f9fafb);
-  padding: 3rem 1rem;
-  font-family: $font-body;
-
-  .max-w-3xl {
-    background-color: #ffffff;
-    border-radius: 1rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-    transition: all 0.4s ease;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-    }
-  }
-
-  /* ===== HEADING ===== */
-  h2 {
-    font-family: $font-heading;
-    color: $primary-color;
-    font-size: 2rem;
-    text-align: center;
-    margin-bottom: 1rem;
-    background: linear-gradient(90deg, $primary-color, $secondary-color);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  p {
-    text-align: center;
-    color: #4b5563;
-    margin-bottom: 2rem;
-  }
-
-  /* ===== ICON POSITIONING FIX ===== */
-  .relative {
-    position: relative;
-
-    i {
-      position: absolute;
-      left: 1.05rem;
-      top: 1.5rem; /* Adjusted for perfect vertical centering */
-      color: #0f56d0;
-      font-size: 1.25rem;
-      pointer-events: none;
-      transition: color 0.3s ease;
-    }
-  }
-
-  /* ===== INPUTS / SELECTS / TEXTAREAS ===== */
-  input,
-  select,
-  textarea {
-    flex: 1;
-    width: 100%;
-    padding: 0.9rem 0.9rem 0.9rem 2.8rem; /* consistent padding for icon spacing */
-    border-radius: 0.5rem;
-    border: 1px solid #125bc8;
-    background-color: $input-bg;
-    font-family: $font-body;
-    font-size: 1rem;
-    color: #2c2c2c;
-    line-height: 1.5;
-    transition: all 0.3s ease;
-
-    &::placeholder {
-      color: #9aa0a6;
-      opacity: 0.9;
-    }
-
-    &:focus {
-      outline: none;
-      border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2);
-      background-color: #ffffff;
-    }
-  }
-
-  /* ===== ICON COLOR CHANGE ON FOCUS ===== */
-  input:focus ~ i,
-  select:focus ~ i,
-  textarea:focus ~ i {
-    color: $primary-color;
-  }
-
-  /* ===== TEXTAREA SPECIAL FIX ===== */
-  textarea {
-    min-height: 110px;
-    resize: vertical;
-    padding-left: 2.8rem; /* keep same spacing as inputs */
-  }
-
-  /* ===== INQUIRY TYPE & MESSAGE ICONS ===== */
-  .fa-list,
-  .fa-comment-dots {
-    color: #0f56d0;
-    font-size: 1.05rem;
-  }
-
-  /* ===== SUBMIT BUTTON ===== */
-  button {
-    font-family: $font-heading;
-    font-weight: 600;
-    background: linear-gradient(90deg, $primary-color, $secondary-color);
-    color: #ffffff;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover:not(:disabled) {
-      background: linear-gradient(90deg, $secondary-color, $primary-color);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    &:disabled {
-      background-color: #9ca3af;
-      cursor: not-allowed;
-    }
-  }
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  color: white;
+  transition: transform .2s ease, box-shadow .2s ease;
 }
 
-/* ===== ALERTS ===== */
-.bg-green-50,
-.bg-red-50 {
-  border-left-width: 6px;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-top: 1rem;
-  font-weight: 500;
-  animation: fadeIn 0.5s ease forwards;
+/* BRAND COLORS */
+.social-btn.instagram { background: #e1306c; }
+.social-btn.youtube { background: #ff0000; }
+.social-btn.facebook { background: #1877f2; }
+.social-btn.twitter { background: #1da1f2; }
+
+.social-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
 
-/* ===== ANIMATIONS ===== */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .contact-page {
-    padding: 2rem 1rem;
-
-    h2 {
-      font-size: 1.7rem;
-    }
-
-    .max-w-3xl {
-      padding: 1.5rem;
-    }
-
-    input,
-    select,
-    textarea {
-      font-size: 0.9rem;
-      padding: 0.7rem 0.7rem 0.7rem 2.3rem;
-    }
-
-    .relative i {
-      top: 0.9rem; /* lower slightly on small screens */
-    }
-
-  }
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .contact-page { padding: 2rem 1rem; }
+  .form-card { padding: 1.6rem; }
+  .hours-card { margin-top: 2rem; }
 }

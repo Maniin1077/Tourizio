@@ -50,7 +50,7 @@ export class NavbarComponent {
       this.session.clearUser();          // Clear session
       this.showProfileMenu = false;
       console.log('User logged out successfully');
-      this.router.navigate(['/']);       // Optional: Redirect to home
+      this.router.navigate(['/']);       // Redirect to home
     } catch (err) {
       console.error('Logout failed', err);
     }

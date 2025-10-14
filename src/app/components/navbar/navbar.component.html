@@ -20,15 +20,21 @@
     <div class="auth md:flex hidden">
       <ng-container *ngIf="user$ | async as user; else authButtons">
         <div class="profile" (click)="toggleProfileMenu()">
-          <img *ngIf="user.photoURL" [src]="user.photoURL" class="avatar" />
-          <i *ngIf="!user.photoURL" class="fas fa-user-circle avatar"></i>
+          <!-- Profile photo -->
+          <img *ngIf="user.photoURL; else defaultAvatar" [src]="user.photoURL" class="avatar" />
+          <ng-template #defaultAvatar>
+            <i class="fas fa-user-circle avatar"></i>
+          </ng-template>
           <span>{{ user.displayName || user.email }}</span>
         </div>
+
+        <!-- Dropdown -->
         <div *ngIf="showProfileMenu" class="profile-dropdown">
           <button (click)="goToProfile()"><i class="fas fa-user-circle"></i> Profile</button>
           <button (click)="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
       </ng-container>
+
       <ng-template #authButtons>
         <a routerLink="/login" class="btn-outline">Login</a>
         <a routerLink="/signup" class="btn-gradient">Sign Up</a>
@@ -50,8 +56,10 @@
     <hr />
     <ng-container *ngIf="user$ | async as user; else mobileAuth">
       <div class="mobile-profile" (click)="toggleProfileMenu()">
-        <img *ngIf="user.photoURL" [src]="user.photoURL" class="avatar" />
-        <i *ngIf="!user.photoURL" class="fas fa-user-circle avatar"></i>
+        <img *ngIf="user.photoURL; else defaultMobileAvatar" [src]="user.photoURL" class="avatar" />
+        <ng-template #defaultMobileAvatar>
+          <i class="fas fa-user-circle avatar"></i>
+        </ng-template>
         <span>{{ user.displayName || user.email }}</span>
       </div>
       <div *ngIf="showProfileMenu" class="mobile-dropdown">

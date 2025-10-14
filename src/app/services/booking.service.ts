@@ -4,45 +4,43 @@ import { Observable, from } from 'rxjs';
 import { map } from 'rxjs/operators';
 import emailjs from '@emailjs/browser';
 
-// ---------------------------
-// BookingData Interface
-// ---------------------------
 export interface BookingData {
-  id?: string;          // Firestore document ID
+  id?: string;
   userId: string;
   name: string;
   destination: string;
   date: string;
   people: number;
   price: number;
-  status?: string;      // optional, defaults to 'Pending'
-  notes?: string;       // optional
-  email?: string;       // optional, used for sending confirmation email
+  status?: string;
+  notes?: string;
+  email?: string;
 }
 
-// ---------------------------
-// Booking Service
-// ---------------------------
 @Injectable({ providedIn: 'root' })
 export class BookingService {
-
   constructor(private firestore: AngularFirestore) {}
 
-  // =============================
-  // Add a new booking
-  // =============================
-  addBooking(data: BookingData): Promise<any> {
+  // ✅ Add booking to Firestore and return docRef
+  async addBooking(data: BookingData): Promise<void> {
     const booking: BookingData = {
       ...data,
       status: data.status || 'Pending',
       notes: data.notes || ''
     };
-    return this.firestore.collection('bookings').add(booking);
+    try {
+      const docRef = await this.firestore.collection('bookings').add(booking);
+      // add Firestore ID to object
+      booking.id = docRef.id;
+      console.log('✅ Booking saved with ID:', docRef.id);
+      await this.sendBookingMail(booking);
+    } catch (e) {
+      console.error('❌ Failed to add booking:', e);
+      throw e;
+    }
   }
 
-  // =============================
-  // Get bookings for a specific user
-  // =============================
+  // ✅ Get all bookings for user
   getUserBookings(userId: string): Observable<BookingData[]> {
     return this.firestore
       .collection<BookingData>('bookings', ref => ref.where('userId', '==', userId))
@@ -63,24 +61,21 @@ export class BookingService {
       );
   }
 
-  // =============================
-  // Delete a booking by ID
-  // =============================
+  // ✅ Cancel/Delete booking
   deleteBooking(bookingId: string): Observable<void> {
+    if (!bookingId) {
+      console.error('❌ Missing booking ID for delete');
+      throw new Error('Missing booking ID');
+    }
     const docRef = this.firestore.doc(`bookings/${bookingId}`);
     return from(docRef.delete());
   }
 
-  // =============================
-  // Send booking confirmation email via EmailJS
-  // =============================
+  // ✅ Send booking confirmation mail
   async sendBookingMail(data: BookingData): Promise<void> {
-    if (!data.email) {
-      console.warn('No email found for booking, skipping email send.');
-      return;
-    }
+    if (!data.email) return;
 
-    const templateParams = {
+    const params = {
       customer_name: data.name,
       customer_email: data.email,
       destination: data.destination,
@@ -89,24 +84,26 @@ export class BookingService {
       price_per_person: data.price,
       total_amount: data.price * data.people,
       booking_date: new Date().toLocaleDateString(),
-      booking_id: data.id || Math.random().toString(36).substring(2, 10).toUpperCase(),
+      booking_id: data.id || 'TEMP_ID',
       status: data.status || 'Pending',
       notes: data.notes || '',
       company_name: 'Tourizio',
       support_email: 'support@tourizio.com',
-      support_phone: '+1 (555) 123-4567'
+      support_phone: '+1 (555) 123-4567',
+      from_name: 'Tourizio Official',
+      from_email: 'tourizioofficial@gmail.com'
     };
 
     try {
       await emailjs.send(
-        'service_ks2s0td',   // Replace with your EmailJS service ID
-        'template_emc74op',  // Replace with your EmailJS template ID
-        templateParams,
-        'vEluSFRJDT2jlYQ1K' // Replace with your EmailJS public key
+        'service_tourizio',
+        'template_5nkq3q3',
+        params,
+        'vEluSFRJDT2jlYQ1K'
       );
-      console.log('✅ Booking confirmation email sent!');
+      console.log('✅ Booking confirmation email sent');
     } catch (err) {
-      console.error('❌ Failed to send booking email:', err);
+      console.error('❌ Email send failed:', err);
     }
   }
 }

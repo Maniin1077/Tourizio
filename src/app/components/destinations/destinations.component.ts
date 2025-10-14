@@ -36,6 +36,7 @@ throw new Error('Method not implemented.');
   trendingPlaces: Place[] = [];
   favoritePlaces: Place[] = [];
   searchedPlaces: Place[] = [];
+  allDestinations: any[] = [];
 
   // Filters
   searchQuery: string = '';
@@ -69,13 +70,55 @@ sp: any;
 
   constructor(private router: Router, private sessionService: UserSessionService) {}
 
-  async ngOnInit(): Promise<void> {
-    this.setCustomMarker();
-    await this.loadDestinations();
-    this.initScrollReveal();
-    this.loadFavorites();
-    this.showRandomPlaces();
-  }
+async ngOnInit(): Promise<void> {
+  this.setCustomMarker();
+  await this.loadDestinations();
+  this.initScrollReveal();
+  this.loadFavorites();
+  this.showRandomPlaces();
+
+  // ✅ Ensure all destinations have days = 1
+  this.assignDefaultDays();
+
+  // ✅ Store destinations for BookingComponent
+  this.storeDestinationsInLocalStorage();
+}
+
+private assignDefaultDays(): void {
+  const assignDays = (places: any[]) => {
+    if (places && Array.isArray(places)) {
+      places.forEach(p => {
+        if (!p.days || p.days < 1) p.days = 1;
+      });
+    }
+  };
+
+  assignDays(this.trendingPlaces);
+  assignDays(this.popularPlaces);
+  assignDays(this.searchedPlaces);
+  assignDays(this.allDestinations);
+}
+
+
+private storeDestinationsInLocalStorage(): void {
+  const uniquePlaces = new Map<number, any>();
+  const combined = [
+    ...(this.trendingPlaces || []),
+    ...(this.popularPlaces || []),
+    ...(this.searchedPlaces || []),
+    ...(this.allDestinations || []),
+  ];
+
+  combined.forEach(place => {
+    if (place && place.id != null && !uniquePlaces.has(place.id)) {
+      uniquePlaces.set(place.id, place);
+    }
+  });
+
+  const allPlaces = Array.from(uniquePlaces.values());
+  localStorage.setItem('destinations', JSON.stringify(allPlaces));
+  console.log('✅ Stored destinations in localStorage:', allPlaces);
+}
 
   // ===== SCROLL REVEAL =====
   private initScrollReveal(): void {

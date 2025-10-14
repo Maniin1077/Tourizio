@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-contact',
@@ -7,10 +8,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
-  // Web3Forms access key (replace with your actual key)
-  web3formsKey = 'ed7befcf-3cfe-405c-a6b8-b871ea4ea2ff';
+  web3formsKey = 'YOUR_ACCESS_KEY_HERE';
 
-  // Contact form model
   contact = {
     name: '',
     email: '',
@@ -19,7 +18,6 @@ export class ContactComponent implements OnInit {
     message: ''
   };
 
-  // Submission states
   isSubmitting = false;
   showSuccessMessage = false;
   showErrorMessage = false;
@@ -27,80 +25,73 @@ export class ContactComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    // Load previously saved data from local storage
     const saved = localStorage.getItem('contactFormData');
     if (saved) {
-      this.contact = JSON.parse(saved);
+      try {
+        this.contact = JSON.parse(saved);
+      } catch {
+        localStorage.removeItem('contactFormData');
+      }
     }
   }
 
-  /**
-   * Save form data in local storage on every input change
-   */
   saveToLocalStorage() {
-    localStorage.setItem('contactFormData', JSON.stringify(this.contact));
+    try {
+      localStorage.setItem('contactFormData', JSON.stringify(this.contact));
+    } catch {}
   }
 
-  /**
-   * Submit contact form to Web3Forms API
-   */
   async submitContact() {
-    if (this.isSubmitting) return; // Prevent multiple submissions
+    if (this.isSubmitting) return;
+
+    // basic front-end checks
     if (!this.contact.name || !this.contact.email || !this.contact.message) {
       this.showErrorMessage = true;
-      setTimeout(() => (this.showErrorMessage = false), 4000);
+      setTimeout(() => (this.showErrorMessage = false), 4200);
       return;
     }
 
     this.isSubmitting = true;
-    this.showSuccessMessage = false;
     this.showErrorMessage = false;
 
+    const formData = new FormData();
+    formData.append('access_key', this.web3formsKey);
+    formData.append('name', this.contact.name);
+    formData.append('email', this.contact.email);
+    formData.append('phone', this.contact.phone || '');
+    formData.append('inquiry_type', this.contact.inquiryType || '');
+    formData.append('message', this.contact.message);
+    formData.append('subject', 'New Contact Form Submission - Tourism App');
+
     try {
-      const formData = new FormData();
-      formData.append('access_key', this.web3formsKey);
-      formData.append('name', this.contact.name);
-      formData.append('email', this.contact.email);
-      formData.append('phone', this.contact.phone || '');
-      formData.append('inquiry_type', this.contact.inquiryType || '');
-      formData.append('message', this.contact.message);
-      formData.append('subject', 'New Contact Form Submission - Tourism App');
-      formData.append('from_name', this.contact.name);
-      formData.append('reply_to', this.contact.email);
+      const response: any = await lastValueFrom(this.http.post('https://api.web3forms.com/submit', formData));
 
-      const response: any = await this.http
-        .post('https://api.web3forms.com/submit', formData)
-        .toPromise();
-
-      if (response.success) {
+      if (response && response.success) {
         this.showSuccessMessage = true;
-        this.resetForm();
         localStorage.removeItem('contactFormData');
-      } else {
-        throw new Error(response.message || 'Submission failed');
-      }
 
-      // Auto-hide success message
-      setTimeout(() => (this.showSuccessMessage = false), 5000);
-    } catch (error) {
-      console.error('Error submitting form:', error);
+        // keep success modal shown and clear after user clicks close
+        // auto-close fallback:
+        setTimeout(() => this.showSuccessMessage = false, 10000);
+
+        // clear form after a short delay so user sees submitted content briefly
+        setTimeout(() => {
+          this.contact = { name: '', email: '', phone: '', inquiryType: '', message: '' };
+        }, 1200);
+      } else {
+        this.showErrorMessage = true;
+        setTimeout(() => (this.showErrorMessage = false), 4200);
+      }
+    } catch (err) {
+      console.error('Submit contact error:', err);
       this.showErrorMessage = true;
-      setTimeout(() => (this.showErrorMessage = false), 5000);
+      setTimeout(() => (this.showErrorMessage = false), 4200);
     } finally {
       this.isSubmitting = false;
     }
   }
 
-  /**
-   * Reset form fields
-   */
-  resetForm() {
-    this.contact = {
-      name: '',
-      email: '',
-      phone: '',
-      inquiryType: '',
-      message: ''
-    };
+  closePopup() {
+    this.showSuccessMessage = false;
   }
 }
