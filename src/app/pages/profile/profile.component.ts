@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BookingService, BookingData } from '../../services/booking.service';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
-  user: any;
+export class ProfileComponent implements OnInit, OnDestroy {
+  user: firebase.User | null = null;
   bookings: BookingData[] = [];
   loading = true;
   error = '';
   private bookingSub?: Subscription;
+afAuth: any;
 
   constructor(
     private bookingService: BookingService,
@@ -21,34 +23,58 @@ export class ProfileComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // Try loading from localStorage first
+    const storedUser = localStorage.getItem('user');
+    const storedBookings = localStorage.getItem('bookings');
+
+    if (storedUser) {
+      this.user = JSON.parse(storedUser);
+    }
+
+    if (storedBookings) {
+      this.bookings = JSON.parse(storedBookings);
+      this.loading = false;
+    }
+
+    // Always fetch fresh data from AuthService and BookingService
     this.loadUserData();
   }
 
-loadUserData() {
-  this.authService.getUser().subscribe({
-    next: (user) => {
-      this.user = user;
-      if (user?.uid) {
-        this.subscribeToBookings(user.uid);
-      } else {
+  loadUserData() {
+    this.authService.getUser().subscribe({
+      next: (user: any) => {
+        if (!user) {
+          this.loading = false;
+          this.error = 'User not logged in.';
+          return;
+        }
+
+        this.user = user as firebase.User;
+        localStorage.setItem('user', JSON.stringify(this.user)); // store user in localStorage
+
+        if (user?.uid) {
+          this.subscribeToBookings(user.uid);
+        } else {
+          this.loading = false;
+          this.error = 'User not logged in.';
+        }
+      },
+      error: (err) => {
+        console.error('Failed to get current user:', err);
         this.loading = false;
-        this.error = 'User not logged in.';
+        this.error = 'Failed to load user.';
       }
-    },
-    error: (err) => {
-      console.error('Failed to get current user:', err);
-      this.loading = false;
-      this.error = 'Failed to load user.';
-    }
-  });
-}
+    });
+  }
 
   private subscribeToBookings(uid: string) {
     this.bookingSub?.unsubscribe();
     this.loading = true;
+
     this.bookingSub = this.bookingService.getUserBookings(uid).subscribe({
       next: (data) => {
         this.bookings = data;
+        localStorage.setItem('bookings', JSON.stringify(this.bookings)); // store bookings in localStorage
         this.loading = false;
       },
       error: (err) => {
@@ -71,6 +97,7 @@ loadUserData() {
       next: () => {
         alert('Booking cancelled successfully.');
         this.bookings = this.bookings.filter(b => b.id !== booking.id);
+        localStorage.setItem('bookings', JSON.stringify(this.bookings)); // update localStorage
       },
       error: (err) => {
         console.error('Cancel error:', err);
